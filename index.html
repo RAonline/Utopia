@@ -3,811 +3,600 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamPulse | Video Sharing, Accounts & Classification</title>
+    <title>StreamPulse - Next-Gen Video Platform & Genre Classifier</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
-                        brand: {
-                            red: '#FF0033',
-                            pink: '#EC4899',
-                            cyan: '#06B6D4',
-                            purple: '#A855F7',
-                            dark: '#0f0f12',
-                            card: '#18181c',
-                            border: '#27272a'
+                        yt: {
+                            bg: '#0f0f0f',
+                            card: '#1f1f1f',
+                            hover: '#272727',
+                            border: '#383838',
+                            red: '#ff0000',
+                            redHover: '#cc0000'
                         }
                     }
                 }
             }
         }
     </script>
-
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom scrollbar styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #f1f1f1;
+        }
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(24, 24, 27, 0.5);
+            background: #0f0f0f;
         }
         ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
+            background: #383838;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #52525b;
+            background: #555555;
         }
-        
-        /* Glassmorphism effects */
-        .glass-panel {
-            background: rgba(24, 24, 28, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .glass-header {
-            background: rgba(15, 15, 18, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        /* Light mode fallback adjustments */
-        html:not(.dark) .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-        }
-        html:not(.dark) .glass-header {
-            background: rgba(248, 250, 252, 0.9);
-        }
-        html:not(.dark) {
-            background-color: #f8fafc;
-            color: #0f172a;
-        }
-
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
-        /* Avatar gradient selections */
-        .avatar-option.selected {
-            ring-width: 3px;
-            ring-color: #f43f5e;
+        .badge-entertainment {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+        .badge-news {
+            background: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
         }
     </style>
 </head>
-<body class="bg-brand-dark text-zinc-100 font-sans min-h-screen flex flex-col antialiased selection:bg-rose-500 selection:text-white transition-colors duration-200">
+<body class="bg-yt-bg min-h-screen flex flex-col antialiased selection:bg-yt-red selection:text-white">
 
-    <div id="app" class="flex flex-col min-h-screen">
-        
-        <!-- HEADER / NAVBAR -->
-        <header class="sticky top-0 z-40 glass-header border-b border-zinc-200 dark:border-zinc-800/80 px-4 lg:px-6 py-2.5 flex items-center justify-between transition-colors">
-            <!-- Left: Logo & Sidebar Toggle -->
-            <div class="flex items-center space-x-3 sm:space-x-4">
-                <button id="toggle-sidebar-btn" class="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition" title="Toggle Menu">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
-                
-                <a href="#" id="logo-home-btn" class="flex items-center space-x-2 group">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-pink-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-play text-white text-sm ml-0.5"></i>
-                    </div>
-                    <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-white dark:via-zinc-200 dark:to-zinc-400">
-                        Stream<span class="text-rose-500">Pulse</span>
-                    </span>
-                </a>
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-yt-bg/95 backdrop-blur-md border-b border-yt-border/50 px-4 py-2.5 flex items-center justify-between gap-4">
+        <!-- Logo & Mobile Menu Toggle -->
+        <div class="flex items-center gap-4">
+            <button id="sidebarToggle" class="p-2 hover:bg-yt-hover rounded-full text-zinc-300 hover:text-white transition-colors" title="Toggle Sidebar">
+                <i class="fa-solid font-bold fa-bars text-lg"></i>
+            </button>
+            <div onclick="navigateTo('home')" class="flex items-center gap-2 cursor-pointer group">
+                <div class="w-9 h-9 bg-yt-red rounded-xl flex items-center justify-center shadow-lg shadow-yt-red/30 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-play text-white text-base ml-0.5"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-white flex items-center">
+                    Stream<span class="text-yt-red">Pulse</span>
+                </span>
             </div>
+        </div>
 
-            <!-- Center: Search Bar -->
-            <div class="flex-1 max-w-2xl mx-4 hidden sm:block">
-                <form id="search-form" class="relative flex items-center">
-                    <div class="relative w-full">
-                        <input id="search-input" type="text" placeholder="Search entertainment or news videos..." 
-                            class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 pl-11 pr-10 py-2 rounded-full border border-zinc-300 dark:border-zinc-700/80 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500 text-sm transition">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-zinc-400 text-sm"></i>
-                        <button type="button" id="clear-search-btn" class="hidden absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-200 text-xs p-1">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Right: Actions (Upload, Saved, Theme, User Auth Dropdown) -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <!-- Mobile Search Toggle -->
-                <button id="mobile-search-toggle" class="sm:hidden p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+        <!-- Search Bar -->
+        <div class="flex-1 max-w-2xl mx-2 hidden sm:block">
+            <div class="relative flex items-center w-full">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search videos by title or tags..." 
+                    class="w-full bg-yt-card border border-yt-border focus:border-yt-red text-zinc-100 placeholder-zinc-400 text-sm rounded-l-full py-2 px-4 outline-none transition-all">
+                <button class="bg-yt-hover hover:bg-zinc-700 border border-l-0 border-yt-border text-zinc-300 hover:text-white px-5 py-2 rounded-r-full transition-colors">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-
-                <!-- Upload Video Button -->
-                <button id="open-upload-modal-btn" class="flex items-center space-x-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-medium text-xs sm:text-sm px-3.5 py-2 rounded-full shadow-md shadow-rose-600/20 hover:shadow-rose-600/40 hover:scale-105 transition-all">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                    <span class="hidden xs:inline">Upload</span>
-                </button>
-
-                <!-- Saved Library Trigger -->
-                <button id="watch-later-btn" class="p-2.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 relative transition" title="Saved Videos">
-                    <i class="fa-solid fa-bookmark text-base"></i>
-                    <span id="saved-badge" class="hidden absolute top-0.5 right-0.5 bg-rose-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                </button>
-
-                <!-- Theme Toggle -->
-                <button id="theme-toggle-btn" class="p-2.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition" title="Toggle Theme">
-                    <i class="fa-solid fa-moon text-base dark:hidden"></i>
-                    <i class="fa-solid fa-sun text-base hidden dark:block text-amber-400"></i>
-                </button>
-
-                <!-- USER AUTH CONTAINER (GUEST VS LOGGED IN) -->
-                <div id="auth-nav-container" class="relative">
-                    <!-- Guest View Button -->
-                    <button id="nav-login-btn" class="bg-zinc-200 dark:bg-zinc-800 hover:bg-rose-600 hover:text-white text-zinc-800 dark:text-zinc-200 text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center space-x-1.5 border border-zinc-300 dark:border-zinc-700">
-                        <i class="fa-solid fa-user-lock"></i>
-                        <span>Sign In</span>
-                    </button>
-
-                    <!-- Logged In User Avatar Dropdown Button -->
-                    <button id="user-menu-btn" class="hidden flex items-center space-x-2 p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition ring-2 ring-rose-500/30">
-                        <div id="nav-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold uppercase shadow">
-                            U
-                        </div>
-                    </button>
-
-                    <!-- User Account Dropdown Menu -->
-                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-brand-card rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 py-2 z-50 text-xs">
-                        <div class="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800/80">
-                            <p class="font-bold text-zinc-900 dark:text-zinc-100 text-sm" id="dropdown-username">User Name</p>
-                            <p class="text-zinc-500 dark:text-zinc-400 text-xs truncate" id="dropdown-email">user@stream.com</p>
-                        </div>
-                        <div class="py-1">
-                            <button id="dropdown-channel-btn" class="w-full text-left px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center space-x-2.5 font-medium">
-                                <i class="fa-solid fa-circle-user text-rose-500 text-sm"></i>
-                                <span>My Channel</span>
-                            </button>
-                            <button id="dropdown-upload-btn" class="w-full text-left px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center space-x-2.5 font-medium">
-                                <i class="fa-solid fa-cloud-arrow-up text-indigo-400 text-sm"></i>
-                                <span>Upload New Video</span>
-                            </button>
-                            <button id="dropdown-saved-btn" class="w-full text-left px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center space-x-2.5 font-medium">
-                                <i class="fa-solid fa-bookmark text-amber-400 text-sm"></i>
-                                <span>Saved Videos</span>
-                            </button>
-                        </div>
-                        <div class="pt-1 border-t border-zinc-200 dark:border-zinc-800/80">
-                            <button id="dropdown-logout-btn" class="w-full text-left px-4 py-2 hover:bg-rose-500/10 text-rose-500 flex items-center space-x-2.5 font-bold">
-                                <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                                <span>Sign Out</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </header>
-
-        <!-- Mobile Search Header Overlay -->
-        <div id="mobile-search-bar" class="hidden sm:hidden glass-header border-b border-zinc-200 dark:border-zinc-800 p-2 px-4 sticky top-[57px] z-30">
-            <div class="relative flex items-center">
-                <input id="mobile-search-input" type="text" placeholder="Search videos..." class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 pl-10 pr-8 py-1.5 rounded-full border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 text-zinc-400 text-xs"></i>
-                <button id="close-mobile-search" class="absolute right-3 text-zinc-400 text-sm">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
             </div>
         </div>
 
-        <!-- MAIN CONTENT WRAPPER WITH SIDEBAR -->
-        <div class="flex-1 flex overflow-hidden">
+        <!-- User Actions & Auth -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <button onclick="openVercelGuideModal()" class="hidden md:flex items-center gap-2 bg-yt-card hover:bg-yt-hover text-xs font-semibold px-3 py-2 rounded-full border border-yt-border transition-colors text-zinc-300">
+                <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
+                <span>Vercel Deploy Info</span>
+            </button>
+
+            <button onclick="requireAuth(openUploadModal)" class="flex items-center gap-2 bg-yt-red hover:bg-yt-redHover text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-full transition-all shadow-md shadow-yt-red/20">
+                <i class="fa-solid fa-plus"></i>
+                <span class="hidden sm:inline">Upload</span>
+            </button>
+
+            <!-- Auth Buttons Container -->
+            <div id="authContainer">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="w-64 bg-yt-bg border-r border-yt-border/50 p-3 hidden md:flex flex-col gap-1 shrink-0 transition-all">
+            <button onclick="navigateTo('home')" id="navHome" class="flex items-center gap-4 px-4 py-3 rounded-xl bg-yt-hover font-medium text-sm text-white transition-colors">
+                <i class="fa-solid fa-house text-lg text-yt-red"></i>
+                <span>Home</span>
+            </button>
+            <button onclick="requireAuth(() => navigateTo('my-channel'))" id="navChannel" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-yt-hover text-zinc-400 hover:text-white font-medium text-sm transition-colors">
+                <i class="fa-solid fa-circle-user text-lg"></i>
+                <span>My Channel</span>
+            </button>
             
-            <!-- SIDEBAR NAV -->
-            <aside id="sidebar" class="w-64 bg-zinc-50 dark:bg-brand-dark border-r border-zinc-200 dark:border-zinc-800/80 flex-shrink-0 transition-all duration-300 flex flex-col justify-between hidden md:flex z-20">
-                <div class="p-4 space-y-6 overflow-y-auto">
-                    <!-- Navigation Group 1 -->
-                    <div class="space-y-1">
-                        <button data-nav="home" class="nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-500 bg-rose-500/10 transition">
-                            <i class="fa-solid fa-house text-base w-5 text-center"></i>
-                            <span>Home Feed</span>
-                        </button>
-                        <button data-nav="channel" class="nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                            <i class="fa-solid fa-circle-user text-base w-5 text-center text-rose-400"></i>
-                            <span>My Channel</span>
-                        </button>
-                        <button data-nav="trending" class="nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                            <i class="fa-solid fa-fire text-base w-5 text-center text-amber-500"></i>
-                            <span>Trending</span>
-                        </button>
-                        <button data-nav="saved" class="nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                            <i class="fa-solid fa-bookmark text-base w-5 text-center text-indigo-400"></i>
-                            <span>Saved Library</span>
-                        </button>
-                    </div>
+            <hr class="border-yt-border/40 my-3">
 
-                    <div class="border-t border-zinc-200 dark:border-zinc-800/80 pt-4">
-                        <h3 class="px-3 text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Genres & Classification</h3>
-                        <div class="space-y-1">
-                            <button data-genre="Entertainment" class="genre-sidebar-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-fuchsia-500/10 hover:text-fuchsia-500 dark:hover:text-fuchsia-400 transition group">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-7 h-7 rounded-lg bg-fuchsia-500/20 text-fuchsia-500 flex items-center justify-center text-xs group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-film"></i>
-                                    </div>
-                                    <span>Entertainment</span>
-                                </div>
-                                <span id="count-entertainment" class="text-xs px-2 py-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">0</span>
-                            </button>
-
-                            <button data-genre="News" class="genre-sidebar-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-sky-500/10 hover:text-sky-500 dark:hover:text-sky-400 transition group">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-xs group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-newspaper"></i>
-                                    </div>
-                                    <span>News</span>
-                                </div>
-                                <span id="count-news" class="text-xs px-2 py-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">0</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Sidebar Account Status Card -->
-                    <div id="sidebar-auth-card" class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-900/20 via-rose-900/10 to-zinc-900 border border-purple-500/20 dark:border-purple-500/30 text-xs">
-                        <div class="flex items-center space-x-2 text-purple-400 font-semibold mb-1">
-                            <i class="fa-solid fa-user-shield"></i>
-                            <span id="sidebar-account-status">Guest Mode</span>
-                        </div>
-                        <p id="sidebar-account-desc" class="text-zinc-400 leading-relaxed">Sign in to publish videos, build your channel, and save content.</p>
-                        <button id="sidebar-login-btn" class="mt-2.5 w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-1.5 rounded-xl text-xs transition">
-                            Sign In / Register
-                        </button>
-                    </div>
-                </div>
-
-                <div class="p-4 border-t border-zinc-200 dark:border-zinc-800/80 text-xs text-zinc-500 dark:text-zinc-500 flex justify-between items-center">
-                    <span>StreamPulse &copy; 2026</span>
-                    <span class="px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded-md font-mono text-[10px]">Auth Enabled</span>
-                </div>
-            </aside>
-
-            <!-- MAIN CONTENT DISPLAY AREA -->
-            <main class="flex-1 overflow-y-auto relative flex flex-col">
-                
-                <!-- SECTION 1: HOME VIDEO FEED & FILTER BAR -->
-                <div id="feed-view" class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
-                    
-                    <!-- Category Chips Bar -->
-                    <div class="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
-                        <div id="category-chips" class="flex items-center space-x-2 min-w-max">
-                            <button data-category="All" class="chip-btn active px-4 py-2 rounded-full text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-600/30 transition-all">
-                                <i class="fa-solid fa-layer-group mr-1.5"></i> All Videos
-                            </button>
-                            <button data-category="Entertainment" class="chip-btn px-4 py-2 rounded-full text-xs font-medium bg-zinc-200 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-fuchsia-600/20 hover:text-fuchsia-400 border border-transparent hover:border-fuchsia-500/30 transition-all">
-                                <i class="fa-solid fa-film mr-1.5 text-fuchsia-500"></i> Entertainment
-                            </button>
-                            <button data-category="News" class="chip-btn px-4 py-2 rounded-full text-xs font-medium bg-zinc-200 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-sky-600/20 hover:text-sky-400 border border-transparent hover:border-sky-500/30 transition-all">
-                                <i class="fa-solid fa-newspaper mr-1.5 text-sky-400"></i> News
-                            </button>
-                            <button data-category="MyUploads" class="chip-btn px-4 py-2 rounded-full text-xs font-medium bg-zinc-200 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-rose-600/20 hover:text-rose-400 border border-transparent hover:border-rose-500/30 transition-all">
-                                <i class="fa-solid fa-circle-user mr-1.5 text-rose-500"></i> My Uploads
-                            </button>
-                        </div>
-
-                        <!-- Video count badge -->
-                        <div class="hidden lg:flex items-center space-x-2 text-xs text-zinc-400 font-medium whitespace-nowrap bg-zinc-100 dark:bg-zinc-900/60 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800">
-                            <i class="fa-solid fa-film text-rose-500"></i>
-                            <span id="feed-count-text">Showing 0 videos</span>
-                        </div>
-                    </div>
-
-                    <!-- Genre Showcase Banner (Dynamic) -->
-                    <div id="genre-banner" class="hidden p-6 rounded-2xl relative overflow-hidden transition-all duration-300">
-                        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div>
-                                <span id="banner-tag" class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-white/20 text-white inline-block mb-2">
-                                    GENRE HIGHLIGHT
-                                </span>
-                                <h2 id="banner-title" class="text-2xl font-bold text-white mb-1">Entertainment Channel</h2>
-                                <p id="banner-desc" class="text-sm text-white/80 max-w-xl">Movies, animations, music visualizers, and creative highlights.</p>
-                            </div>
-                        </div>
-                        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl text-white pointer-events-none">
-                            <i id="banner-icon" class="fa-solid fa-film"></i>
-                        </div>
-                    </div>
-
-                    <!-- SEARCH STATS BAR (when searching) -->
-                    <div id="search-stats" class="hidden flex items-center justify-between bg-zinc-100 dark:bg-zinc-900/80 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm">
-                        <span id="search-query-text" class="text-zinc-700 dark:text-zinc-300">
-                            Search results for "<strong id="search-term-display"></strong>"
-                        </span>
-                        <button id="clear-search-filter" class="text-rose-500 hover:text-rose-400 font-medium text-xs flex items-center space-x-1">
-                            <span>Reset Search</span>
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-
-                    <!-- VIDEO CARD GRID -->
-                    <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                        <!-- Dynamic video cards injected here via JS -->
-                    </div>
-
-                    <!-- EMPTY STATE -->
-                    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-16 text-center space-y-4">
-                        <div class="w-20 h-20 rounded-full bg-zinc-200 dark:bg-zinc-800/80 flex items-center justify-center text-rose-500 text-3xl">
-                            <i class="fa-solid fa-film"></i>
-                        </div>
-                        <div class="max-w-md">
-                            <h3 id="empty-title" class="text-lg font-bold text-zinc-800 dark:text-zinc-200">No videos available yet</h3>
-                            <p id="empty-desc" class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Be the first to upload an Entertainment or News video to populate the platform!</p>
-                        </div>
-                        <button id="empty-upload-btn" class="mt-2 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs px-5 py-2.5 rounded-full shadow-lg transition">
-                            <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Upload Video Now
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- SECTION 2: MY CHANNEL VIEW -->
-                <div id="channel-view" class="hidden p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
-                    <!-- Channel Header Banner -->
-                    <div class="relative rounded-3xl bg-gradient-to-r from-rose-900 via-purple-900 to-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 sm:p-8 overflow-hidden shadow-xl">
-                        <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-                            <div id="channel-avatar-lg" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-500 via-pink-500 to-purple-600 text-white font-extrabold text-3xl flex items-center justify-center shadow-2xl ring-4 ring-white/10">
-                                U
-                            </div>
-                            <div class="flex-1 space-y-2">
-                                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                                    <h1 id="channel-username-display" class="text-2xl sm:text-3xl font-extrabold text-white">Channel Name</h1>
-                                    <span class="bg-rose-500/20 text-rose-300 text-xs font-bold px-3 py-1 rounded-full border border-rose-500/30">Verified Creator</span>
-                                </div>
-                                <p id="channel-email-display" class="text-xs text-zinc-300 font-mono">user@stream.com</p>
-                                
-                                <!-- Channel Quick Stats -->
-                                <div class="flex flex-wrap justify-center sm:justify-start gap-4 pt-3 text-xs">
-                                    <div class="bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
-                                        <span class="text-zinc-400 block text-[10px] uppercase">Uploads</span>
-                                        <span id="channel-stat-uploads" class="font-extrabold text-white text-base">0</span>
-                                    </div>
-                                    <div class="bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
-                                        <span class="text-zinc-400 block text-[10px] uppercase">Total Views</span>
-                                        <span id="channel-stat-views" class="font-extrabold text-white text-base">0</span>
-                                    </div>
-                                    <div class="bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
-                                        <span class="text-zinc-400 block text-[10px] uppercase">Total Likes</span>
-                                        <span id="channel-stat-likes" class="font-extrabold text-white text-base">0</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Channel Videos Grid -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center space-x-2">
-                                <i class="fa-solid fa-video text-rose-500"></i>
-                                <span>Uploaded Videos</span>
-                            </h2>
-                            <button id="channel-upload-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs px-4 py-2 rounded-full transition shadow">
-                                <i class="fa-solid fa-plus mr-1.5"></i>Upload New
-                            </button>
-                        </div>
-
-                        <div id="channel-video-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                            <!-- Injected user channel videos -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SECTION 3: VIDEO WATCH / PLAYER VIEW -->
-                <div id="watch-view" class="hidden p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
-                    
-                    <!-- Back Button -->
-                    <button id="back-to-feed-btn" class="inline-flex items-center space-x-2 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-rose-500 dark:hover:text-rose-400 transition mb-2">
-                        <i class="fa-solid fa-arrow-left"></i>
-                        <span>Back to Feed</span>
+            <div class="px-4 py-1">
+                <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Categories</h4>
+                <div class="space-y-1">
+                    <button onclick="setGenreFilter('All')" class="genre-side-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-yt-hover transition-colors font-medium text-left">
+                        <span><i class="fa-solid fa-layer-group text-xs mr-2 text-zinc-400"></i> All Genres</span>
+                        <span id="countAll" class="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400">0</span>
                     </button>
+                    <button onclick="setGenreFilter('Entertainment')" class="genre-side-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-yt-hover transition-colors font-medium text-left">
+                        <span><i class="fa-solid fa-film text-xs mr-2 text-pink-400"></i> Entertainment</span>
+                        <span id="countEntertainment" class="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400">0</span>
+                    </button>
+                    <button onclick="setGenreFilter('News')" class="genre-side-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-yt-hover transition-colors font-medium text-left">
+                        <span><i class="fa-solid fa-newspaper text-xs mr-2 text-cyan-400"></i> News</span>
+                        <span id="countNews" class="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400">0</span>
+                    </button>
+                </div>
+            </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        
-                        <!-- Left Main Column: Video Player & Meta -->
-                        <div class="lg:col-span-2 space-y-4">
-                            
-                            <!-- Video Player Container -->
-                            <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-zinc-200 dark:border-zinc-800 group">
-                                <video id="main-video-player" controls class="w-full h-full object-contain" poster="">
-                                    <source id="video-source" src="" type="video/mp4">
-                                    Your browser does not support HTML5 video.
-                                </video>
+            <div class="mt-auto p-4 bg-yt-card/50 rounded-2xl border border-yt-border/40 text-xs text-zinc-400">
+                <div class="font-semibold text-zinc-200 mb-1 flex items-center gap-1.5">
+                    <i class="fa-solid fa-hard-drive text-yt-red"></i> IndexedDB Storage
+                </div>
+                <p class="leading-relaxed">Videos are saved in browser storage (IndexedDB) with zero file-size limit crashes.</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6" id="mainContainer">
+            
+            <!-- Category Chips Header -->
+            <div id="categoryChips" class="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
+                <button onclick="setGenreFilter('All')" id="chipAll" class="chip-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-colors shrink-0">
+                    All
+                </button>
+                <button onclick="setGenreFilter('Entertainment')" id="chipEntertainment" class="chip-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-yt-card border border-yt-border text-zinc-300 hover:bg-yt-hover transition-colors shrink-0 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                    Entertainment
+                </button>
+                <button onclick="setGenreFilter('News')" id="chipNews" class="chip-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-yt-card border border-yt-border text-zinc-300 hover:bg-yt-hover transition-colors shrink-0 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    News
+                </button>
+                <div class="ml-auto hidden lg:flex items-center gap-2">
+                    <button onclick="seedDemoContent()" class="text-xs bg-yt-card hover:bg-yt-hover text-zinc-300 px-3 py-1.5 rounded-lg border border-yt-border transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-yt-red"></i> Load Sample Videos
+                    </button>
+                </div>
+            </div>
+
+            <!-- SEARCH / FILTER STATUS -->
+            <div id="filterStatus" class="hidden mb-4 flex items-center justify-between bg-yt-card px-4 py-2.5 rounded-xl border border-yt-border">
+                <div class="text-sm text-zinc-300 flex items-center gap-2">
+                    <i class="fa-solid fa-filter text-yt-red"></i>
+                    <span id="filterStatusText">Showing results</span>
+                </div>
+                <button onclick="resetFilters()" class="text-xs text-zinc-400 hover:text-white underline">Clear filter</button>
+            </div>
+
+            <!-- VIDEO GRID VIEW -->
+            <div id="videoGridView" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Dynamic Video Cards Rendered Here -->
+            </div>
+
+            <!-- EMPTY STATE -->
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+                <div class="w-20 h-20 bg-yt-card border border-yt-border rounded-full flex items-center justify-center text-zinc-500 mb-4 text-3xl">
+                    <i class="fa-solid fa-video-slash"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">No videos found</h3>
+                <p class="text-zinc-400 text-sm max-w-sm mb-6">Be the first creator to upload a video or seed demo content to get started.</p>
+                <div class="flex items-center gap-3">
+                    <button onclick="requireAuth(openUploadModal)" class="bg-yt-red hover:bg-yt-redHover text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-all">
+                        <i class="fa-solid fa-upload mr-2"></i> Upload Video
+                    </button>
+                    <button onclick="seedDemoContent()" class="bg-yt-card hover:bg-yt-hover border border-yt-border text-zinc-300 font-semibold text-sm px-5 py-2.5 rounded-full transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-yt-red"></i> Add Sample Videos
+                    </button>
+                </div>
+            </div>
+
+            <!-- MY CHANNEL VIEW (Hidden by default) -->
+            <div id="myChannelView" class="hidden space-y-6">
+                <!-- Channel Header Banner -->
+                <div id="channelBanner" class="bg-gradient-to-r from-red-900/40 via-yt-card to-zinc-900 p-6 md:p-8 rounded-3xl border border-yt-border/60 flex flex-col md:flex-row items-center gap-6">
+                    <img id="channelAvatar" src="" class="w-24 h-24 rounded-full object-cover border-4 border-yt-red shadow-xl" alt="Channel Avatar">
+                    <div class="text-center md:text-left flex-1">
+                        <h2 id="channelName" class="text-2xl font-bold text-white mb-1">Channel Name</h2>
+                        <p id="channelEmail" class="text-sm text-zinc-400 mb-4">email@example.com</p>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                            <div class="bg-yt-bg/80 border border-yt-border px-4 py-2 rounded-xl">
+                                <span class="text-xs text-zinc-400 block">Total Uploads</span>
+                                <span id="statUploads" class="text-lg font-bold text-white">0</span>
                             </div>
-
-                            <!-- Video Title & Category Badge -->
-                            <div class="space-y-3">
-                                <div class="flex flex-wrap items-start justify-between gap-2">
-                                    <h1 id="watch-video-title" class="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 leading-snug">
-                                        Loading Video...
-                                    </h1>
-                                    <span id="watch-genre-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center space-x-1.5 shadow-sm">
-                                        <i class="fa-solid fa-film"></i>
-                                        <span>Entertainment</span>
-                                    </span>
-                                </div>
-
-                                <!-- Action Toolbar & Stats -->
-                                <div class="flex flex-wrap items-center justify-between gap-4 py-3 border-y border-zinc-200 dark:border-zinc-800 text-sm">
-                                    <!-- Stats -->
-                                    <div class="flex items-center space-x-3 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                                        <span id="watch-view-count"><i class="fa-regular fa-eye mr-1"></i>0 views</span>
-                                        <span>•</span>
-                                        <span id="watch-upload-date"><i class="fa-regular fa-calendar mr-1"></i>Just now</span>
-                                    </div>
-
-                                    <!-- Interaction Buttons -->
-                                    <div class="flex items-center space-x-2 sm:space-x-3">
-                                        <!-- Like / Dislike Pill -->
-                                        <div class="flex items-center bg-zinc-200 dark:bg-zinc-800 rounded-full p-0.5 border border-zinc-300 dark:border-zinc-700/60">
-                                            <button id="like-btn" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-l-full hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition font-medium text-xs">
-                                                <i class="fa-regular fa-thumbs-up text-sm"></i>
-                                                <span id="like-count">0</span>
-                                            </button>
-                                            <div class="h-4 w-[1px] bg-zinc-300 dark:bg-zinc-700"></div>
-                                            <button id="dislike-btn" class="px-3 py-1.5 rounded-r-full hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition text-xs">
-                                                <i class="fa-regular fa-thumbs-down text-sm"></i>
-                                            </button>
-                                        </div>
-
-                                        <!-- Share Button -->
-                                        <button id="share-btn" class="flex items-center space-x-1.5 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 px-3.5 py-1.5 rounded-full text-xs font-medium border border-zinc-300 dark:border-zinc-700/60 transition">
-                                            <i class="fa-solid fa-share text-xs"></i>
-                                            <span>Share</span>
-                                        </button>
-
-                                        <!-- Save Button -->
-                                        <button id="bookmark-watch-btn" class="flex items-center space-x-1.5 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 px-3.5 py-1.5 rounded-full text-xs font-medium border border-zinc-300 dark:border-zinc-700/60 transition">
-                                            <i class="fa-regular fa-bookmark text-xs"></i>
-                                            <span id="bookmark-text">Save</span>
-                                        </button>
-
-                                        <!-- Delete Video (Creator Only) -->
-                                        <button id="delete-watch-btn" class="hidden flex items-center space-x-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 px-3.5 py-1.5 rounded-full text-xs font-medium border border-rose-500/30 transition" title="Delete Video">
-                                            <i class="fa-solid fa-trash text-xs"></i>
-                                            <span>Delete</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Channel Info Card -->
-                                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800">
-                                    <div class="flex items-center space-x-3">
-                                        <div id="watch-channel-avatar" class="w-10 h-10 rounded-full bg-rose-600 text-white font-bold flex items-center justify-center text-sm shadow-md uppercase">
-                                            U
-                                        </div>
-                                        <div>
-                                            <h4 id="watch-channel-name" class="font-bold text-sm text-zinc-900 dark:text-zinc-100">Uploader Name</h4>
-                                            <p id="watch-channel-subscribers" class="text-xs text-zinc-500 dark:text-zinc-400">StreamPulse Creator</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Description Box -->
-                                <div class="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 space-y-2">
-                                    <p id="watch-description" class="whitespace-pre-line leading-relaxed">
-                                        Video description content...
-                                    </p>
-                                    <div class="pt-2 flex flex-wrap gap-2" id="watch-tags">
-                                        <!-- Dynamic tags -->
-                                    </div>
-                                </div>
-
+                            <div class="bg-yt-bg/80 border border-yt-border px-4 py-2 rounded-xl">
+                                <span class="text-xs text-zinc-400 block">Total Views</span>
+                                <span id="statViews" class="text-lg font-bold text-white">0</span>
                             </div>
-
-                            <!-- COMMENTS SECTION -->
-                            <div class="pt-6 border-t border-zinc-200 dark:border-zinc-800/80 space-y-6">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center space-x-2">
-                                        <span>Comments</span>
-                                        <span id="comment-count-badge" class="px-2 py-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-xs text-zinc-600 dark:text-zinc-400">0</span>
-                                    </h3>
-                                </div>
-
-                                <!-- Add Comment Form -->
-                                <form id="add-comment-form" class="flex gap-3">
-                                    <div id="comment-user-avatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-500 to-purple-500 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold uppercase">
-                                        U
-                                    </div>
-                                    <div class="flex-1 space-y-2">
-                                        <textarea id="comment-input" rows="2" placeholder="Add a public comment..." 
-                                            class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm p-3 rounded-xl border border-zinc-300 dark:border-zinc-700/80 focus:outline-none focus:ring-2 focus:ring-rose-500/50 resize-none transition"></textarea>
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" id="cancel-comment-btn" class="px-3 py-1.5 rounded-full text-xs font-medium text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition">Cancel</button>
-                                            <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-semibold shadow transition">Comment</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-                                <!-- Comments List -->
-                                <div id="comments-list" class="space-y-4">
-                                    <!-- Comments injected here -->
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Right Sidebar Column: Related Videos -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center space-x-2">
-                                    <i class="fa-solid fa-circle-play text-rose-500"></i>
-                                    <span>Up Next & Related</span>
-                                </h3>
-                            </div>
-
-                            <div id="related-videos-list" class="space-y-3">
-                                <!-- Related cards -->
+                            <div class="bg-yt-bg/80 border border-yt-border px-4 py-2 rounded-xl">
+                                <span class="text-xs text-zinc-400 block">Total Likes</span>
+                                <span id="statLikes" class="text-lg font-bold text-white">0</span>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
 
-            </main>
-        </div>
+                <div class="flex items-center justify-between border-b border-yt-border/60 pb-3">
+                    <h3 class="text-lg font-bold text-white">Your Uploaded Videos</h3>
+                    <button onclick="openUploadModal()" class="text-xs bg-yt-red hover:bg-yt-redHover text-white px-3 py-2 rounded-lg font-semibold transition-colors">
+                        <i class="fa-solid fa-plus mr-1"></i> New Upload
+                    </button>
+                </div>
 
+                <!-- Channel Videos List -->
+                <div id="channelVideoList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    <!-- User videos rendered here -->
+                </div>
+            </div>
+
+        </main>
     </div>
 
-    <!-- MODAL 1: AUTHENTICATION MODAL (SIGN IN / SIGN UP) -->
-    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden transition-opacity">
-        <div class="bg-white dark:bg-brand-card w-full max-w-md rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden flex flex-col">
+    <!-- VIDEO WATCH MODAL -->
+    <div id="watchModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden overflow-y-auto">
+        <div class="max-w-6xl mx-auto p-3 sm:p-6 min-h-screen flex flex-col justify-center">
             
-            <!-- Auth Modal Tabs Header -->
-            <div class="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
-                <div class="flex space-x-2 bg-zinc-200 dark:bg-zinc-800 p-1 rounded-full">
-                    <button id="tab-login-btn" class="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-rose-600 transition shadow">
-                        Sign In
-                    </button>
-                    <button id="tab-signup-btn" class="px-4 py-1.5 rounded-full text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                        Register
-                    </button>
-                </div>
-                <button id="close-auth-modal-btn" class="text-zinc-400 hover:text-zinc-200 p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition">
+            <!-- Close Button Header -->
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-xs text-zinc-400 font-medium flex items-center gap-2">
+                    <span id="playerGenreBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold text-white">Genre</span>
+                    <span id="playerTypeInfo" class="text-zinc-500">Video Player</span>
+                </span>
+                <button onclick="closeWatchModal()" class="w-10 h-10 bg-yt-card hover:bg-yt-hover rounded-full flex items-center justify-center text-zinc-300 hover:text-white transition-colors">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <!-- LOGIN FORM -->
-            <form id="login-form" class="p-6 space-y-4">
-                <div class="text-center space-y-1 mb-2">
-                    <h3 class="font-extrabold text-xl text-zinc-900 dark:text-zinc-100">Welcome Back</h3>
-                    <p class="text-xs text-zinc-500">Log in to upload videos and save your library</p>
+            <!-- Player Container -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-4">
+                    <!-- Video Embed Frame / Video Tag -->
+                    <div class="relative bg-black rounded-2xl overflow-hidden aspect-video border border-yt-border shadow-2xl">
+                        <div id="videoPlayerContainer" class="w-full h-full">
+                            <!-- Injected HTML5 <video> or <iframe> -->
+                        </div>
+                    </div>
+
+                    <!-- Video Details -->
+                    <div class="bg-yt-card p-5 rounded-2xl border border-yt-border space-y-4">
+                        <h1 id="playerTitle" class="text-xl font-bold text-white leading-snug">Video Title</h1>
+                        
+                        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-yt-border/60">
+                            <!-- Creator Profile -->
+                            <div class="flex items-center gap-3">
+                                <img id="playerCreatorAvatar" src="" class="w-11 h-11 rounded-full object-cover border border-yt-border" alt="Avatar">
+                                <div>
+                                    <h3 id="playerCreatorName" class="font-bold text-white text-sm">Creator Name</h3>
+                                    <span id="playerUploadDate" class="text-xs text-zinc-400">Uploaded recently</span>
+                                </div>
+                            </div>
+
+                            <!-- Actions (Likes, Dislikes, Share) -->
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center bg-zinc-800 rounded-full border border-yt-border overflow-hidden">
+                                    <button onclick="toggleLike()" id="btnLike" class="flex items-center gap-2 px-4 py-2 hover:bg-yt-hover text-xs font-semibold text-zinc-300 transition-colors border-r border-yt-border">
+                                        <i class="fa-regular fa-thumbs-up text-sm"></i>
+                                        <span id="playerLikeCount">0</span>
+                                    </button>
+                                    <button onclick="toggleDislike()" id="btnDislike" class="px-3 py-2 hover:bg-yt-hover text-xs text-zinc-300 transition-colors">
+                                        <i class="fa-regular fa-thumbs-down text-sm"></i>
+                                    </button>
+                                </div>
+                                <button onclick="shareVideo()" class="flex items-center gap-2 bg-zinc-800 hover:bg-yt-hover text-xs font-semibold px-4 py-2 rounded-full border border-yt-border text-zinc-300 transition-colors">
+                                    <i class="fa-solid fa-share"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- View Count & Description -->
+                        <div class="bg-yt-bg p-4 rounded-xl text-xs text-zinc-300 space-y-2 border border-yt-border/40">
+                            <div class="font-bold text-white flex items-center gap-3 text-xs">
+                                <span id="playerViews">0 views</span>
+                                <span>•</span>
+                                <span id="playerCategoryTag" class="text-yt-red">Category</span>
+                            </div>
+                            <p id="playerDescription" class="whitespace-pre-line text-zinc-300 leading-relaxed">Video description content...</p>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="space-y-4 pt-2">
+                            <h3 class="font-bold text-white text-base flex items-center gap-2">
+                                <span>Comments</span>
+                                <span id="commentCountBadge" class="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400">0</span>
+                            </h3>
+
+                            <!-- Add Comment Input -->
+                            <div class="flex items-start gap-3">
+                                <img id="commentUserAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" class="w-9 h-9 rounded-full object-cover border border-yt-border" alt="Avatar">
+                                <div class="flex-1 flex gap-2">
+                                    <input type="text" id="commentInput" placeholder="Add a public comment..." 
+                                        class="flex-1 bg-yt-bg border border-yt-border rounded-xl px-4 py-2 text-xs text-white focus:border-yt-red outline-none">
+                                    <button onclick="submitComment()" class="bg-yt-red hover:bg-yt-redHover text-white px-4 py-2 rounded-xl text-xs font-semibold transition-colors">
+                                        Comment
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Comment List -->
+                            <div id="commentsList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                                <!-- Dynamic comments -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Email or Username</label>
-                    <input type="text" id="login-identifier" required placeholder="e.g. creator@stream.com"
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+                <!-- Sidebar Recommended Videos -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-white text-sm mb-2 flex items-center justify-between">
+                        <span>Up Next</span>
+                        <span class="text-xs text-zinc-400 font-normal">Related Videos</span>
+                    </h3>
+                    <div id="upNextContainer" class="space-y-3">
+                        <!-- Up next cards -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- UPLOAD VIDEO MODAL -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-yt-card border border-yt-border rounded-3xl w-full max-w-xl p-6 shadow-2xl relative overflow-hidden">
+            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h2 class="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-cloud-arrow-up text-yt-red"></i> Upload Video
+            </h2>
+            <p class="text-xs text-zinc-400 mb-5">Publish content directly stored in your browser's IndexedDB engine.</p>
+
+            <!-- Upload Type Tabs -->
+            <div class="flex bg-yt-bg p-1 rounded-xl border border-yt-border mb-5">
+                <button onclick="switchUploadTab('file')" id="tabFile" class="flex-1 py-2 text-xs font-semibold rounded-lg bg-yt-card text-white transition-all">
+                    <i class="fa-solid fa-file-video mr-1.5"></i> Local Video File
+                </button>
+                <button onclick="switchUploadTab('url')" id="tabUrl" class="flex-1 py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition-all">
+                    <i class="fa-brands fa-youtube mr-1.5 text-yt-red"></i> Video URL / YouTube
+                </button>
+            </div>
+
+            <!-- Upload Form -->
+            <form id="uploadForm" onsubmit="handleVideoUpload(event)" class="space-y-4">
+                
+                <!-- Tab A: Local File Upload -->
+                <div id="uploadFileSection" class="space-y-3">
+                    <div id="dropZone" onclick="document.getElementById('videoFileInput').click()" 
+                        class="border-2 border-dashed border-yt-border hover:border-yt-red bg-yt-bg/50 hover:bg-yt-hover/50 p-6 rounded-2xl text-center cursor-pointer transition-all">
+                        <i class="fa-solid fa-file-arrow-up text-3xl text-yt-red mb-2 block"></i>
+                        <span class="text-xs font-semibold text-zinc-200 block mb-1">Click or drag & drop video file here</span>
+                        <span class="text-[10px] text-zinc-400">Supports MP4, WebM, MOV (Stored in IndexedDB)</span>
+                        <input type="file" id="videoFileInput" accept="video/*" class="hidden" onchange="handleFileSelect(event)">
+                    </div>
+                    <div id="fileSelectedInfo" class="hidden bg-yt-bg p-3 rounded-xl border border-yt-border flex items-center justify-between text-xs text-zinc-300">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                            <span id="fileNameDisplay" class="truncate font-medium">video.mp4</span>
+                        </div>
+                        <span id="fileSizeDisplay" class="text-zinc-400 text-[10px]">0 MB</span>
+                    </div>
                 </div>
 
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Password</label>
-                    <input type="password" id="login-password" required placeholder="••••••••"
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+                <!-- Tab B: Video URL / YouTube -->
+                <div id="uploadUrlSection" class="hidden space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-300 mb-1">YouTube URL or MP4 Link</label>
+                        <input type="url" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=... or .mp4 URL" 
+                            class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
+                        <p class="text-[10px] text-zinc-400 mt-1">Accepts standard YouTube links, Shorts, or direct video file URLs.</p>
+                    </div>
                 </div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg transition hover:scale-[1.02]">
-                    Sign In
+                <!-- Shared Metadata Fields -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Video Title <span class="text-yt-red">*</span></label>
+                    <input type="text" id="uploadTitle" required placeholder="Enter an engaging title..." 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
+                </div>
+
+                <!-- MANDATORY GENRE CLASSIFICATION -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Mandatory Genre Classification <span class="text-yt-red">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="relative flex items-center p-3 rounded-xl border border-yt-border bg-yt-bg cursor-pointer hover:border-pink-500 transition-colors">
+                            <input type="radio" name="uploadGenre" value="Entertainment" checked class="text-yt-red focus:ring-0">
+                            <span class="ml-2 text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-film text-pink-400"></i> Entertainment
+                            </span>
+                        </label>
+                        <label class="relative flex items-center p-3 rounded-xl border border-yt-border bg-yt-bg cursor-pointer hover:border-cyan-500 transition-colors">
+                            <input type="radio" name="uploadGenre" value="News" class="text-yt-red focus:ring-0">
+                            <span class="ml-2 text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-newspaper text-cyan-400"></i> News
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Description</label>
+                    <textarea id="uploadDescription" rows="2" placeholder="Tell viewers about your video..." 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none"></textarea>
+                </div>
+
+                <!-- Custom Thumbnail Override -->
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Custom Thumbnail URL (Optional)</label>
+                    <input type="url" id="uploadThumbnailUrl" placeholder="Auto-generated if left blank for files" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="uploadProgressContainer" class="hidden space-y-1">
+                    <div class="flex justify-between text-[10px] text-zinc-400">
+                        <span>Processing & Storing Video...</span>
+                        <span id="uploadProgressText">0%</span>
+                    </div>
+                    <div class="w-full bg-yt-bg h-2 rounded-full overflow-hidden border border-yt-border">
+                        <div id="uploadProgressBar" class="bg-yt-red h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btnSubmitUpload" class="w-full bg-yt-red hover:bg-yt-redHover text-white font-semibold py-3 rounded-xl text-xs transition-all shadow-lg shadow-yt-red/20">
+                    Publish Video
                 </button>
             </form>
+        </div>
+    </div>
 
-            <!-- SIGN UP FORM -->
-            <form id="signup-form" class="p-6 space-y-4 hidden">
-                <div class="text-center space-y-1 mb-2">
-                    <h3 class="font-extrabold text-xl text-zinc-900 dark:text-zinc-100">Create Account</h3>
-                    <p class="text-xs text-zinc-500">Join StreamPulse video community today</p>
+    <!-- AUTHENTICATION MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-yt-card border border-yt-border rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Auth Mode Switcher -->
+            <div class="flex border-b border-yt-border mb-6">
+                <button onclick="switchAuthTab('login')" id="authTabLogin" class="flex-1 pb-3 text-sm font-bold text-yt-red border-b-2 border-yt-red transition-all">
+                    Sign In
+                </button>
+                <button onclick="switchAuthTab('signup')" id="authTabSignup" class="flex-1 pb-3 text-sm font-bold text-zinc-400 border-b-2 border-transparent hover:text-white transition-all">
+                    Create Account
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Email or Username</label>
+                    <input type="text" id="loginEmail" required placeholder="alex@streampulse.io" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
                 </div>
-
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Username *</label>
-                    <input type="text" id="signup-username" required placeholder="e.g. PixelMaster"
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
                 </div>
+                <button type="submit" class="w-full bg-yt-red hover:bg-yt-redHover text-white font-semibold py-3 rounded-xl text-xs transition-all">
+                    Sign In
+                </button>
+                <p class="text-[11px] text-zinc-400 text-center">Quick Demo Login? Just enter any username/password!</p>
+            </form>
 
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Email Address *</label>
-                    <input type="email" id="signup-email" required placeholder="e.g. pixel@stream.com"
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+            <!-- SIGNUP FORM -->
+            <form id="signupForm" onsubmit="handleSignup(event)" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Channel Username</label>
+                    <input type="text" id="signupUsername" required placeholder="Alex Creator" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
                 </div>
-
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Password *</label>
-                    <input type="password" id="signup-password" required placeholder="••••••••"
-                        class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Email Address</label>
+                    <input type="email" id="signupEmail" required placeholder="alex@streampulse.io" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
                 </div>
-
-                <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg transition hover:scale-[1.02]">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Password</label>
+                    <input type="password" id="signupPassword" required placeholder="••••••••" 
+                        class="w-full bg-yt-bg border border-yt-border rounded-xl p-3 text-xs text-white focus:border-yt-red outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Select Avatar Style</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" onclick="selectAvatar(this)" class="avatar-opt w-12 h-12 rounded-full border-2 border-yt-red cursor-pointer p-0.5" alt="Avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" onclick="selectAvatar(this)" class="avatar-opt w-12 h-12 rounded-full border-2 border-transparent hover:border-zinc-500 cursor-pointer p-0.5" alt="Avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan" onclick="selectAvatar(this)" class="avatar-opt w-12 h-12 rounded-full border-2 border-transparent hover:border-zinc-500 cursor-pointer p-0.5" alt="Avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=TechGuru" onclick="selectAvatar(this)" class="avatar-opt w-12 h-12 rounded-full border-2 border-transparent hover:border-zinc-500 cursor-pointer p-0.5" alt="Avatar">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-yt-red hover:bg-yt-redHover text-white font-semibold py-3 rounded-xl text-xs transition-all">
                     Create Account
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL 2: UPLOAD VIDEO MODAL -->
-    <div id="upload-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden transition-opacity">
-        <div class="bg-white dark:bg-brand-card w-full max-w-2xl rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            
-            <!-- Modal Header -->
-            <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800/80 flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center text-sm">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-base text-zinc-900 dark:text-zinc-100">Upload & Classify Video</h3>
-                        <p class="text-xs text-zinc-500">Categorize into Entertainment or News</p>
-                    </div>
+    <!-- VERCEL DEPLOYMENT INFORMATION MODAL -->
+    <div id="vercelModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-yt-card border border-yt-border rounded-3xl w-full max-w-xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeVercelGuideModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-yt-border/60 pb-3">
+                <div class="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center font-bold text-xl">
+                    ▲
                 </div>
-                <button id="close-upload-modal-btn" class="text-zinc-400 hover:text-zinc-200 p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Vercel Deployment Architecture</h2>
+                    <p class="text-xs text-zinc-400">How StreamPulse handles storage on static hosting</p>
+                </div>
             </div>
 
-            <!-- Modal Content Form -->
-            <form id="upload-form" class="p-6 overflow-y-auto space-y-5 flex-1">
-                
-                <!-- Drag & Drop Zone -->
-                <div id="drop-zone" class="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-rose-500 dark:hover:border-rose-500 rounded-2xl p-6 text-center bg-zinc-50 dark:bg-zinc-900/50 transition cursor-pointer relative group">
-                    <input type="file" id="video-file-input" accept="video/*" class="hidden">
-                    
-                    <div id="upload-prompt" class="space-y-3">
-                        <div class="w-14 h-14 mx-auto rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-file-video"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-zinc-800 dark:text-zinc-200">Drag & drop your video file here</p>
-                            <p class="text-xs text-zinc-500 mt-0.5">or click to browse from computer (MP4, WebM, MOV)</p>
-                        </div>
-                    </div>
-
-                    <!-- Selected File Preview Container -->
-                    <div id="file-preview-container" class="hidden space-y-3">
-                        <video id="file-preview-player" controls class="w-full max-h-48 rounded-xl object-contain bg-black shadow"></video>
-                        <div class="flex items-center justify-between text-xs text-zinc-500 bg-zinc-200 dark:bg-zinc-800 px-3 py-2 rounded-lg">
-                            <span id="file-name-display" class="font-mono truncate max-w-xs text-zinc-800 dark:text-zinc-200">video.mp4</span>
-                            <button type="button" id="remove-file-btn" class="text-rose-500 hover:underline font-semibold">Change File</button>
-                        </div>
-                    </div>
+            <div class="space-y-3 text-xs text-zinc-300 leading-relaxed">
+                <div class="bg-yt-bg p-3.5 rounded-xl border border-yt-border">
+                    <h4 class="font-bold text-white mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-database text-cyan-400"></i> Client-Side Persistence (IndexedDB)
+                    </h4>
+                    <p>StreamPulse stores full binary video file blobs inside your browser's IndexedDB engine. This eliminates the 5MB `localStorage` limit and allows uploading large MP4/WebM videos directly on Vercel without server endpoints.</p>
                 </div>
 
-                <!-- Form Fields -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Title -->
-                    <div class="sm:col-span-2 space-y-1.5">
-                        <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Video Title *</label>
-                        <input type="text" id="upload-title" required placeholder="e.g. Breakthrough Tech Conference 2026 Keynote" 
-                            class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
-                    </div>
-
-                    <!-- Category Selector (Genre Classification) -->
-                    <div class="sm:col-span-2 space-y-2">
-                        <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Genre Classification *</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="genre-radio-label relative flex items-center p-3 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700/80 bg-zinc-50 dark:bg-zinc-900 cursor-pointer hover:border-fuchsia-500 transition">
-                                <input type="radio" name="upload-genre" value="Entertainment" checked class="sr-only peer">
-                                <div class="flex items-center space-x-3 w-full">
-                                    <div class="w-9 h-9 rounded-xl bg-fuchsia-500/20 text-fuchsia-500 flex items-center justify-center text-sm">
-                                        <i class="fa-solid fa-film"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-sm text-zinc-900 dark:text-zinc-100">Entertainment</div>
-                                        <div class="text-[11px] text-zinc-500">Movies, Music, Gaming</div>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="genre-radio-label relative flex items-center p-3 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700/80 bg-zinc-50 dark:bg-zinc-900 cursor-pointer hover:border-sky-500 transition">
-                                <input type="radio" name="upload-genre" value="News" class="sr-only peer">
-                                <div class="flex items-center space-x-3 w-full">
-                                    <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm">
-                                        <i class="fa-solid fa-newspaper"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-sm text-zinc-900 dark:text-zinc-100">News</div>
-                                        <div class="text-[11px] text-zinc-500">Reports, Tech, Politics</div>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Thumbnail URL or Auto Thumbnail -->
-                    <div class="sm:col-span-2 space-y-1.5">
-                        <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Custom Cover Image URL (Optional)</label>
-                        <input type="url" id="upload-thumbnail" placeholder="Auto-generated frame if left empty" 
-                            class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50">
-                    </div>
-
-                    <!-- Description -->
-                    <div class="sm:col-span-2 space-y-1.5">
-                        <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Description</label>
-                        <textarea id="upload-desc" rows="3" placeholder="Provide a brief summary of the video content..." 
-                            class="w-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50 resize-none"></textarea>
-                    </div>
+                <div class="bg-yt-bg p-3.5 rounded-xl border border-yt-border">
+                    <h4 class="font-bold text-white mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud text-yt-red"></i> Multi-User Scaling (Vercel Blob / Cloudinary)
+                    </h4>
+                    <p>For global cross-device video sharing, connect Vercel Blob or AWS S3 in `handleVideoUpload()`:</p>
+                    <pre class="bg-black/80 p-2.5 rounded-lg text-[10px] text-emerald-400 font-mono mt-2 overflow-x-auto">
+// Example Cloud API integration
+const blob = await vercelBlob.put(file.name, file, { access: 'public' });
+videoRecord.videoUrl = blob.url;</pre>
                 </div>
+            </div>
 
-                <!-- Footer Buttons -->
-                <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end space-x-3">
-                    <button type="button" id="cancel-upload-btn" class="px-5 py-2.5 rounded-full text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition">
-                        Cancel
-                    </button>
-                    <button type="submit" id="submit-upload-btn" class="bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white px-6 py-2.5 rounded-full text-xs font-bold shadow-lg shadow-rose-600/30 transition hover:scale-105">
-                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Publish Video
-                    </button>
-                </div>
-
-            </form>
+            <button onclick="closeVercelGuideModal()" class="w-full bg-yt-hover hover:bg-zinc-700 text-white font-semibold py-2.5 rounded-xl text-xs transition-colors">
+                Got It, Let's Stream!
+            </button>
         </div>
     </div>
 
-    <!-- MODAL 3: DELETE CONFIRMATION MODAL -->
-    <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden transition-opacity">
-        <div class="bg-white dark:bg-brand-card w-full max-w-sm rounded-3xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-2xl text-center space-y-4">
-            <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center text-xl mx-auto">
-                <i class="fa-solid fa-trash-can"></i>
-            </div>
-            <div>
-                <h3 class="font-bold text-lg text-zinc-900 dark:text-zinc-100">Delete Video?</h3>
-                <p class="text-xs text-zinc-500 mt-1">This action cannot be undone and will permanently remove the video from storage.</p>
-            </div>
-            <div class="flex space-x-2 pt-2">
-                <button id="cancel-delete-btn" class="flex-1 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold py-2.5 rounded-xl transition">
-                    Cancel
-                </button>
-                <button id="confirm-delete-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold py-2.5 rounded-xl shadow transition">
-                    Delete Video
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION BANNER -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 flex items-center space-x-3 bg-zinc-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-zinc-700 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-        <div id="toast-icon-bg" class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center text-sm">
-            <i id="toast-icon" class="fa-solid fa-check"></i>
-        </div>
-        <div>
-            <div id="toast-title" class="font-bold text-xs">Notification</div>
-            <div id="toast-message" class="text-xs text-zinc-300">Action performed successfully.</div>
-        </div>
-    </div>
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <script>
-        
-        // --- INDEXED DB STORAGE FOR USER UPLOADED VIDEOS ---
-        const DB_NAME = 'StreamPulse_Storage';
+        // ==========================================
+        // INDEXED DB HELPER FOR FULL VIDEO BLOBS
+        // ==========================================
+        const DB_NAME = 'StreamPulseDB';
         const DB_VERSION = 1;
-        const STORE_NAME = 'uploaded_videos';
+        const STORE_NAME = 'videoBlobs';
 
-        function openIndexedDB() {
+        function openDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(DB_NAME, DB_VERSION);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        db.createObjectStore(STORE_NAME);
                     }
                 };
                 request.onsuccess = (e) => resolve(e.target.result);
@@ -815,1033 +604,942 @@
             });
         }
 
-        async function saveVideoToStorage(videoObj) {
-            try {
-                const db = await openIndexedDB();
+        async function saveVideoBlob(id, blob) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
                 const tx = db.transaction(STORE_NAME, 'readwrite');
                 const store = tx.objectStore(STORE_NAME);
-                store.put(videoObj);
-                return new Promise((resolve) => {
-                    tx.oncomplete = () => resolve(true);
-                    tx.onerror = () => resolve(false);
-                });
-            } catch (err) {
-                return false;
-            }
+                const req = store.put(blob, id);
+                req.onsuccess = () => resolve();
+                req.onerror = (e) => reject(e.target.error);
+            });
         }
 
-        async function deleteVideoFromStorage(videoId) {
-            try {
-                const db = await openIndexedDB();
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                store.delete(videoId);
-                return new Promise((resolve) => {
-                    tx.oncomplete = () => resolve(true);
-                    tx.onerror = () => resolve(false);
-                });
-            } catch (err) {
-                return false;
-            }
-        }
-
-        async function loadStoredVideos() {
-            try {
-                const db = await openIndexedDB();
+        async function getVideoBlob(id) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
                 const tx = db.transaction(STORE_NAME, 'readonly');
                 const store = tx.objectStore(STORE_NAME);
-                const req = store.getAll();
-                return new Promise((resolve) => {
-                    req.onsuccess = () => resolve(req.result || []);
-                    req.onerror = () => resolve([]);
-                });
-            } catch (err) {
-                return [];
+                const req = store.get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function deleteVideoBlob(id) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve();
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let currentUser = JSON.parse(localStorage.getItem('streampulse_user')) || null;
+        let videos = JSON.parse(localStorage.getItem('streampulse_videos')) || [];
+        let currentGenreFilter = 'All';
+        let searchQuery = '';
+        let currentWatchingVideoId = null;
+        let selectedUploadFile = null;
+        let selectedAvatarUrl = 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex';
+
+        // SAMPLE SEED CONTENT (Initial high-quality YouTube/Public MP4 videos)
+        const DEFAULT_SEED_VIDEOS = [
+            {
+                id: 'seed_1',
+                title: 'Big Buck Bunny 4K Official Animated Short',
+                description: 'A large and lovable rabbit deal with bullying forest creatures in this iconic open-source animated comedy film.',
+                creatorId: 'user_blender',
+                creatorName: 'Blender Studio',
+                creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Blender',
+                genre: 'Entertainment',
+                type: 'youtube',
+                videoUrl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ',
+                youtubeId: 'aqz-KE-bpKQ',
+                thumbnailUrl: 'https://img.youtube.com/vi/aqz-KE-bpKQ/hqdefault.jpg',
+                duration: '10:34',
+                views: 14200,
+                likes: 1250,
+                dislikes: 14,
+                comments: [
+                    { id: 'c1', username: 'AnimationFan', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fan', text: 'Classic open source masterpiece!', date: '2 days ago' }
+                ],
+                createdAt: new Date(Date.now() - 86400000 * 3).toISOString()
+            },
+            {
+                id: 'seed_2',
+                title: 'Global Tech & Innovation Daily News Briefing',
+                description: 'Breaking updates on renewable energy tech, AI breakthroughs, and space exploration milestones from today.',
+                creatorId: 'user_newsroom',
+                creatorName: 'Pulse Daily News',
+                creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=News',
+                genre: 'News',
+                type: 'youtube',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                youtubeId: 'dQw4w9WgXcQ',
+                thumbnailUrl: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&auto=format&fit=crop&q=80',
+                duration: '03:45',
+                views: 8900,
+                likes: 620,
+                dislikes: 8,
+                comments: [
+                    { id: 'c2', username: 'TechGeek', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Geek', text: 'Great breakdown of today\'s news!', date: '1 day ago' }
+                ],
+                createdAt: new Date(Date.now() - 86400000 * 1).toISOString()
+            },
+            {
+                id: 'seed_3',
+                title: 'Tears of Steel - Sci-Fi Movie Short',
+                description: 'Set in a dystopian future Amsterdam where scientists attempt to recall a tragic past encounter.',
+                creatorId: 'user_blender',
+                creatorName: 'Blender Studio',
+                creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Blender',
+                genre: 'Entertainment',
+                type: 'youtube',
+                videoUrl: 'https://www.youtube.com/watch?v=R6MlUcmOul8',
+                youtubeId: 'R6MlUcmOul8',
+                thumbnailUrl: 'https://img.youtube.com/vi/R6MlUcmOul8/hqdefault.jpg',
+                duration: '12:14',
+                views: 23100,
+                likes: 3100,
+                dislikes: 42,
+                comments: [],
+                createdAt: new Date(Date.now() - 86400000 * 5).toISOString()
             }
-        }
+        ];
 
-        // --- APP STATE ---
-        const state = {
-            currentUser: JSON.parse(localStorage.getItem('sp_current_user') || 'null'),
-            registeredUsers: JSON.parse(localStorage.getItem('sp_registered_users') || '[]'),
-            videos: [],
-            activeCategory: 'All', // 'All', 'Entertainment', 'News', 'MyUploads'
-            subFilter: null,       // 'Popular', 'Saved'
-            searchQuery: '',
-            currentVideoId: null,
-            pendingDeleteId: null,
-            savedVideoIds: new Set(JSON.parse(localStorage.getItem('sp_saved_ids') || '[]')),
-            likedVideoIds: new Set(JSON.parse(localStorage.getItem('sp_liked_ids') || '[]')),
-            comments: JSON.parse(localStorage.getItem('sp_comments') || '{}'),
-            currentTheme: localStorage.getItem('sp_theme') || 'dark',
-            authTab: 'login' // 'login' or 'signup'
-        };
-
-        // Theme Initialization
-        if (state.currentTheme === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
-
-        // --- AUTHENTICATION HELPERS ---
-        function saveUserState() {
-            localStorage.setItem('sp_current_user', JSON.stringify(state.currentUser));
-            localStorage.setItem('sp_registered_users', JSON.stringify(state.registeredUsers));
-        }
-
-        function registerUser(username, email, password) {
-            const exists = state.registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase() || u.username.toLowerCase() === username.toLowerCase());
-            if (exists) {
-                showToast('Username or email is already registered!', 'fa-triangle-exclamation');
-                return false;
+        // Initial setup on window load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (videos.length === 0) {
+                videos = DEFAULT_SEED_VIDEOS;
+                saveVideosState();
             }
-
-            const newUser = {
-                id: 'usr-' + Date.now(),
-                username: username,
-                email: email,
-                password: password, // Simple client storage session demo
-                joinedDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-            };
-
-            state.registeredUsers.push(newUser);
-            state.currentUser = newUser;
-            saveUserState();
-            renderAuthUI();
-            showToast(`Welcome to StreamPulse, ${username}!`, 'fa-user-check');
-            return true;
-        }
-
-        function loginUser(identifier, password) {
-            const user = state.registeredUsers.find(u => 
-                (u.email.toLowerCase() === identifier.toLowerCase() || u.username.toLowerCase() === identifier.toLowerCase()) && 
-                u.password === password
-            );
-
-            if (!user) {
-                showToast('Invalid login credentials!', 'fa-triangle-exclamation');
-                return false;
-            }
-
-            state.currentUser = user;
-            saveUserState();
-            renderAuthUI();
-            showToast(`Signed in as ${user.username}`, 'fa-user-check');
-            return true;
-        }
-
-        function logoutUser() {
-            state.currentUser = null;
-            saveUserState();
-            renderAuthUI();
-            closeUserDropdown();
-            showToast('Signed out successfully', 'fa-right-from-bracket');
-            if (state.activeCategory === 'MyUploads') {
-                state.activeCategory = 'All';
-                updateCategoryChipUI();
-                renderVideoGrid();
-            }
-        }
-
-        function requireAuth(callbackAction) {
-            if (!state.currentUser) {
-                openAuthModal();
-                showToast('Please sign in or create an account first!', 'fa-lock');
-                return false;
-            }
-            if (callbackAction) callbackAction();
-            return true;
-        }
-
-        // --- UI RENDER FUNCTIONS ---
-        function renderAuthUI() {
-            const guestLoginBtn = document.getElementById('nav-login-btn');
-            const userMenuBtn = document.getElementById('user-menu-btn');
-            const navAvatar = document.getElementById('nav-user-avatar');
-            const dropdownUsername = document.getElementById('dropdown-username');
-            const dropdownEmail = document.getElementById('dropdown-email');
-            
-            const sidebarStatus = document.getElementById('sidebar-account-status');
-            const sidebarDesc = document.getElementById('sidebar-account-desc');
-            const sidebarLoginBtn = document.getElementById('sidebar-login-btn');
-
-            if (state.currentUser) {
-                // Logged in UI
-                guestLoginBtn.classList.add('hidden');
-                userMenuBtn.classList.remove('hidden');
-                navAvatar.textContent = state.currentUser.username.charAt(0).toUpperCase();
-                
-                dropdownUsername.textContent = state.currentUser.username;
-                dropdownEmail.textContent = state.currentUser.email;
-
-                sidebarStatus.textContent = state.currentUser.username;
-                sidebarDesc.textContent = `Creator account active. Total user uploads: ${getUsersVideoCount(state.currentUser.id)}`;
-                sidebarLoginBtn.textContent = 'View My Channel';
-                sidebarLoginBtn.onclick = () => openChannelView();
-
-                // Comment avatar
-                document.getElementById('comment-user-avatar').textContent = state.currentUser.username.charAt(0).toUpperCase();
-            } else {
-                // Guest UI
-                guestLoginBtn.classList.remove('hidden');
-                userMenuBtn.classList.add('hidden');
-
-                sidebarStatus.textContent = 'Guest Mode';
-                sidebarDesc.textContent = 'Sign in to publish videos, build your channel, and save content.';
-                sidebarLoginBtn.textContent = 'Sign In / Register';
-                sidebarLoginBtn.onclick = () => openAuthModal();
-
-                document.getElementById('comment-user-avatar').textContent = 'G';
-            }
-        }
-
-        function getUsersVideoCount(userId) {
-            return state.videos.filter(v => v.userId === userId).length;
-        }
-
-        async function initApp() {
-            // Load persistent videos from IndexedDB
-            const storedVideos = await loadStoredVideos();
-            state.videos = [...storedVideos];
-
-            renderAuthUI();
-            renderCategoryCounts();
+            renderAuthHeader();
             renderVideoGrid();
-            updateSavedBadge();
-            bindEvents();
+            updateCategoryCounts();
+        });
+
+        function saveVideosState() {
+            localStorage.setItem('streampulse_videos', JSON.stringify(videos));
+            updateCategoryCounts();
         }
 
-        function formatViews(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M views';
-            if (num >= 1000) return (num / 1000).toFixed(0) + 'K views';
-            return num + ' views';
+        // ==========================================
+        // UI NAVIGATION & RENDER LOGIC
+        // ==========================================
+        function setGenreFilter(genre) {
+            currentGenreFilter = genre;
+            
+            // Update Chip UI
+            document.querySelectorAll('.chip-btn').forEach(btn => {
+                btn.className = 'chip-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-yt-card border border-yt-border text-zinc-300 hover:bg-yt-hover transition-colors shrink-0';
+            });
+
+            const activeChip = document.getElementById(`chip${genre}`);
+            if (activeChip) {
+                activeChip.className = 'chip-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-colors shrink-0';
+            }
+
+            // Update Filter Status Banner
+            const statusBox = document.getElementById('filterStatus');
+            const statusText = document.getElementById('filterStatusText');
+            if (genre !== 'All' || searchQuery.trim() !== '') {
+                statusBox.classList.remove('hidden');
+                statusText.innerText = `Filtering by: ${genre !== 'All' ? genre : ''} ${searchQuery ? `"${searchQuery}"` : ''}`;
+            } else {
+                statusBox.classList.add('hidden');
+            }
+
+            renderVideoGrid();
         }
 
-        function renderCategoryCounts() {
-            const entCount = state.videos.filter(v => v.category === 'Entertainment').length;
-            const newsCount = state.videos.filter(v => v.category === 'News').length;
-
-            document.getElementById('count-entertainment').textContent = entCount;
-            document.getElementById('count-news').textContent = newsCount;
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            setGenreFilter(currentGenreFilter);
         }
 
-        function getFilteredVideos() {
-            let list = [...state.videos];
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            setGenreFilter('All');
+        }
 
-            // Filter by Category
-            if (state.activeCategory === 'Entertainment' || state.activeCategory === 'News') {
-                list = list.filter(v => v.category === state.activeCategory);
-            } else if (state.activeCategory === 'MyUploads') {
-                if (state.currentUser) {
-                    list = list.filter(v => v.userId === state.currentUser.id);
-                } else {
-                    list = [];
-                }
+        function updateCategoryCounts() {
+            const allCount = videos.length;
+            const entCount = videos.filter(v => v.genre === 'Entertainment').length;
+            const newsCount = videos.filter(v => v.genre === 'News').length;
+
+            document.getElementById('countAll').innerText = allCount;
+            document.getElementById('countEntertainment').innerText = entCount;
+            document.getElementById('countNews').innerText = newsCount;
+        }
+
+        function seedDemoContent() {
+            const exists = videos.some(v => v.id.startsWith('seed_'));
+            if (!exists) {
+                videos = [...DEFAULT_SEED_VIDEOS, ...videos];
+            } else {
+                showToast('Sample videos already added!');
             }
-
-            // Subfilters
-            if (state.subFilter === 'Saved') {
-                list = list.filter(v => state.savedVideoIds.has(v.id));
-            } else if (state.subFilter === 'Popular') {
-                list.sort((a, b) => b.views - a.views);
-            }
-
-            // Search Query
-            if (state.searchQuery.trim() !== '') {
-                const q = state.searchQuery.toLowerCase();
-                list = list.filter(v => 
-                    v.title.toLowerCase().includes(q) || 
-                    v.category.toLowerCase().includes(q) ||
-                    v.uploader.toLowerCase().includes(q) ||
-                    v.description.toLowerCase().includes(q)
-                );
-            }
-
-            return list;
+            saveVideosState();
+            renderVideoGrid();
+            showToast('Sample videos loaded into feed');
         }
 
         function renderVideoGrid() {
-            const grid = document.getElementById('video-grid');
-            const emptyState = document.getElementById('empty-state');
-            const emptyTitle = document.getElementById('empty-title');
-            const emptyDesc = document.getElementById('empty-desc');
-            const feedCountText = document.getElementById('feed-count-text');
-            const banner = document.getElementById('genre-banner');
+            const grid = document.getElementById('videoGridView');
+            const empty = document.getElementById('emptyState');
+            const myChannelView = document.getElementById('myChannelView');
+            
+            myChannelView.classList.add('hidden');
+            grid.classList.remove('hidden');
 
-            const filtered = getFilteredVideos();
-
-            feedCountText.textContent = `Showing ${filtered.length} video${filtered.length === 1 ? '' : 's'}`;
-
-            // Handle Genre Banner display
-            if (state.activeCategory === 'Entertainment') {
-                banner.classList.remove('hidden');
-                banner.className = 'p-6 rounded-2xl relative overflow-hidden bg-gradient-to-r from-fuchsia-900/80 via-purple-900/80 to-zinc-900 border border-fuchsia-500/30 text-white transition-all';
-                document.getElementById('banner-tag').textContent = 'GENRE HIGHLIGHT';
-                document.getElementById('banner-title').textContent = 'Entertainment Channel 🎬';
-                document.getElementById('banner-desc').textContent = 'Movies, music videos, gaming highlights, and creative media animations.';
-                document.getElementById('banner-icon').className = 'fa-solid fa-film';
-            } else if (state.activeCategory === 'News') {
-                banner.classList.remove('hidden');
-                banner.className = 'p-6 rounded-2xl relative overflow-hidden bg-gradient-to-r from-sky-900/80 via-indigo-900/80 to-zinc-900 border border-sky-500/30 text-white transition-all';
-                document.getElementById('banner-tag').textContent = 'GENRE HIGHLIGHT';
-                document.getElementById('banner-title').textContent = 'News & Reports Network 📰';
-                document.getElementById('banner-desc').textContent = 'Global headlines, technological updates, political analysis, and tech news.';
-                document.getElementById('banner-icon').className = 'fa-solid fa-newspaper';
-            } else {
-                banner.classList.add('hidden');
-            }
+            let filtered = videos.filter(v => {
+                const matchesGenre = (currentGenreFilter === 'All' || v.genre === currentGenreFilter);
+                const matchesSearch = v.title.toLowerCase().includes(searchQuery) || v.description.toLowerCase().includes(searchQuery);
+                return matchesGenre && matchesSearch;
+            });
 
             if (filtered.length === 0) {
                 grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                
-                if (state.activeCategory === 'MyUploads') {
-                    if (!state.currentUser) {
-                        emptyTitle.textContent = "Please sign in to view your channel";
-                        emptyDesc.textContent = "Log in or register an account to view and manage your uploaded videos.";
-                    } else {
-                        emptyTitle.textContent = "You haven't uploaded any videos yet";
-                        emptyDesc.textContent = "Share your first Entertainment or News video with the community!";
-                    }
-                } else {
-                    emptyTitle.textContent = "No videos available yet";
-                    emptyDesc.textContent = "Be the first to upload an Entertainment or News video to populate the platform!";
-                }
-
+                empty.classList.remove('hidden');
+                empty.classList.add('flex');
                 return;
             }
 
-            emptyState.classList.add('hidden');
+            empty.classList.add('hidden');
+            empty.classList.remove('flex');
 
-            grid.innerHTML = filtered.map(video => {
-                const isSaved = state.savedVideoIds.has(video.id);
-                const isNews = video.category === 'News';
-                const isOwner = state.currentUser && video.userId === state.currentUser.id;
-
-                const categoryBadge = isNews 
-                    ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30"><i class="fa-solid fa-newspaper mr-1"></i>News</span>`
-                    : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30"><i class="fa-solid fa-film mr-1"></i>Entertainment</span>`;
-
-                return `
-                    <div class="video-card group bg-zinc-50 dark:bg-brand-card rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col cursor-pointer" data-id="${video.id}">
-                        <!-- Thumbnail Overlay -->
-                        <div class="relative w-full aspect-video bg-zinc-900 overflow-hidden">
-                            <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80'">
-                            
-                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <div class="w-12 h-12 rounded-full bg-rose-600/90 text-white flex items-center justify-center text-lg shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                                    <i class="fa-solid fa-play ml-1"></i>
-                                </div>
-                            </div>
-
-                            <span class="absolute bottom-2.5 right-2.5 bg-black/80 text-white font-mono text-[11px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm">
-                                ${video.duration || '01:30'}
-                            </span>
-
-                            <div class="absolute top-2.5 right-2.5 flex items-center space-x-1 z-10">
-                                <button class="save-card-btn w-8 h-8 rounded-full ${isSaved ? 'bg-rose-600 text-white' : 'bg-black/60 text-white hover:bg-rose-600'} flex items-center justify-center text-xs backdrop-blur-sm transition" data-id="${video.id}" title="${isSaved ? 'Unsave' : 'Save Video'}">
-                                    <i class="${isSaved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-                                </button>
-                                ${isOwner ? `
-                                    <button class="delete-card-btn w-8 h-8 rounded-full bg-black/60 text-white hover:bg-rose-600 flex items-center justify-center text-xs backdrop-blur-sm transition" data-id="${video.id}" title="Delete Video">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                ` : ''}
-                            </div>
-                        </div>
-
-                        <!-- Card Meta -->
-                        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between">
-                                    ${categoryBadge}
-                                    <span class="text-[11px] text-zinc-400 font-medium">${video.timestamp}</span>
-                                </div>
-                                <h3 class="font-bold text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 transition line-clamp-2 leading-snug">
-                                    ${video.title}
-                                </h3>
-                            </div>
-
-                            <div class="flex items-center space-x-2.5 pt-1 border-t border-zinc-200/60 dark:border-zinc-800/60">
-                                <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-rose-500 to-purple-600 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0 uppercase">
-                                    ${video.uploader.charAt(0).toUpperCase()}
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 truncate">${video.uploader}</div>
-                                    <div class="text-[11px] text-zinc-400 truncate">${formatViews(video.views)}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            // Card Event Listeners
-            document.querySelectorAll('.video-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (e.target.closest('.save-card-btn') || e.target.closest('.delete-card-btn')) return;
-                    const id = card.getAttribute('data-id');
-                    openWatchView(id);
-                });
-            });
-
-            document.querySelectorAll('.save-card-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    requireAuth(() => {
-                        const id = btn.getAttribute('data-id');
-                        toggleSaveVideo(id);
-                    });
-                });
-            });
-
-            document.querySelectorAll('.delete-card-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = btn.getAttribute('data-id');
-                    openDeleteModal(id);
-                });
-            });
+            grid.innerHTML = filtered.map(video => createVideoCardHTML(video)).join('');
         }
 
-        function openChannelView() {
-            if (!requireAuth()) return;
+        function createVideoCardHTML(video) {
+            const isNews = video.genre === 'News';
+            const badgeClass = isNews ? 'badge-news' : 'badge-entertainment';
+            const iconClass = isNews ? 'fa-newspaper' : 'fa-film';
 
-            document.getElementById('feed-view').classList.add('hidden');
-            document.getElementById('watch-view').classList.add('hidden');
-            document.getElementById('channel-view').classList.remove('hidden');
+            return `
+                <div class="group cursor-pointer flex flex-col space-y-3" onclick="openWatchModal('${video.id}')">
+                    <!-- Thumbnail Container -->
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-zinc-800 border border-yt-border/50 group-hover:scale-[1.02] transition-transform duration-200 shadow-md">
+                        <img src="${video.thumbnailUrl || 'https://placehold.co/600x400/1f1f1f/ffffff?text=Video'}" 
+                             class="w-full h-full object-cover" 
+                             alt="${escapeHTML(video.title)}" 
+                             onerror="this.src='https://placehold.co/600x400/1f1f1f/ffffff?text=StreamPulse'">
+                        
+                        <!-- Duration Badge -->
+                        <span class="absolute bottom-2.5 right-2.5 bg-black/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm">
+                            ${video.duration || '00:00'}
+                        </span>
 
-            const user = state.currentUser;
-            document.getElementById('channel-username-display').textContent = user.username;
-            document.getElementById('channel-email-display').textContent = user.email;
-            document.getElementById('channel-avatar-lg').textContent = user.username.charAt(0).toUpperCase();
-
-            const userVideos = state.videos.filter(v => v.userId === user.id);
-            const totalViews = userVideos.reduce((sum, v) => sum + (v.views || 0), 0);
-            const totalLikes = userVideos.reduce((sum, v) => sum + (v.likes || 0), 0);
-
-            document.getElementById('channel-stat-uploads').textContent = userVideos.length;
-            document.getElementById('channel-stat-views').textContent = formatViews(totalViews);
-            document.getElementById('channel-stat-likes').textContent = totalLikes.toLocaleString();
-
-            const grid = document.getElementById('channel-video-grid');
-            if (userVideos.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center text-zinc-500 space-y-2">
-                        <i class="fa-solid fa-video-slash text-3xl"></i>
-                        <p class="text-sm">You haven't uploaded any videos to your channel yet.</p>
+                        <!-- Mandatory Genre Badge -->
+                        <span class="absolute top-2.5 left-2.5 ${badgeClass} text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1">
+                            <i class="fa-solid ${iconClass}"></i> ${video.genre}
+                        </span>
                     </div>
-                `;
-            } else {
-                grid.innerHTML = userVideos.map(video => `
-                    <div class="video-card bg-zinc-50 dark:bg-brand-card rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 p-3 space-y-2 relative group" data-id="${video.id}">
-                        <div class="aspect-video bg-black rounded-xl overflow-hidden relative">
-                            <img src="${video.thumbnail}" class="w-full h-full object-cover">
-                            <span class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">${video.duration || '01:30'}</span>
-                        </div>
-                        <h4 class="font-bold text-xs truncate text-zinc-900 dark:text-zinc-100">${video.title}</h4>
-                        <div class="flex justify-between items-center text-[11px] text-zinc-400">
-                            <span>${video.category}</span>
-                            <span>${formatViews(video.views)}</span>
+
+                    <!-- Meta Details -->
+                    <div class="flex items-start gap-3 px-1">
+                        <img src="${video.creatorAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'}" 
+                             class="w-9 h-9 rounded-full object-cover border border-yt-border shrink-0 mt-0.5" alt="Avatar">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-white text-sm line-clamp-2 leading-snug group-hover:text-yt-red transition-colors">
+                                ${escapeHTML(video.title)}
+                            </h3>
+                            <p class="text-xs text-zinc-400 font-medium mt-1 hover:text-zinc-200">
+                                ${escapeHTML(video.creatorName)}
+                            </p>
+                            <div class="flex items-center gap-2 text-[11px] text-zinc-400 mt-0.5">
+                                <span>${formatNumber(video.views)} views</span>
+                                <span>•</span>
+                                <span>${formatRelativeTime(video.createdAt)}</span>
+                            </div>
                         </div>
                     </div>
-                `).join('');
-
-                grid.querySelectorAll('.video-card').forEach(card => {
-                    card.addEventListener('click', () => {
-                        openWatchView(card.getAttribute('data-id'));
-                    });
-                });
-            }
+                </div>
+            `;
         }
 
-        // --- WATCH VIEW PLAYER ---
-        function openWatchView(videoId) {
-            const video = state.videos.find(v => v.id === videoId);
+        // ==========================================
+        // WATCH PLAYER & PLAYBACK
+        // ==========================================
+        async function openWatchModal(videoId) {
+            const video = videos.find(v => v.id === videoId);
             if (!video) return;
 
-            state.currentVideoId = videoId;
+            currentWatchingVideoId = videoId;
             video.views = (video.views || 0) + 1;
+            saveVideosState();
 
-            document.getElementById('feed-view').classList.add('hidden');
-            document.getElementById('channel-view').classList.add('hidden');
-            document.getElementById('watch-view').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const modal = document.getElementById('watchModal');
+            const playerContainer = document.getElementById('videoPlayerContainer');
 
-            const player = document.getElementById('main-video-player');
-            const source = document.getElementById('video-source');
-            
-            source.src = video.url;
-            player.load();
-            player.play().catch(() => {});
+            // Set Metadata
+            document.getElementById('playerTitle').innerText = video.title;
+            document.getElementById('playerCreatorName').innerText = video.creatorName;
+            document.getElementById('playerCreatorAvatar').src = video.creatorAvatar;
+            document.getElementById('playerUploadDate').innerText = `Uploaded ${formatRelativeTime(video.createdAt)}`;
+            document.getElementById('playerViews').innerText = `${formatNumber(video.views)} views`;
+            document.getElementById('playerCategoryTag').innerText = `#${video.genre}`;
+            document.getElementById('playerDescription').innerText = video.description || 'No description provided.';
+            document.getElementById('playerLikeCount').innerText = formatNumber(video.likes || 0);
 
-            document.getElementById('watch-video-title').textContent = video.title;
-            document.getElementById('watch-view-count').innerHTML = `<i class="fa-regular fa-eye mr-1"></i>${formatViews(video.views)}`;
-            document.getElementById('watch-upload-date').innerHTML = `<i class="fa-regular fa-calendar mr-1"></i>${video.timestamp}`;
-            document.getElementById('watch-channel-name').textContent = video.uploader;
-            document.getElementById('watch-channel-avatar').textContent = video.uploader.charAt(0).toUpperCase();
-            document.getElementById('watch-description').textContent = video.description;
-            document.getElementById('like-count').textContent = (video.likes || 0).toLocaleString();
+            // Genre Badge
+            const badge = document.getElementById('playerGenreBadge');
+            badge.innerText = video.genre;
+            badge.className = video.genre === 'News' ? 'px-2.5 py-0.5 rounded-full text-xs font-bold text-white badge-news' : 'px-2.5 py-0.5 rounded-full text-xs font-bold text-white badge-entertainment';
 
-            const badge = document.getElementById('watch-genre-badge');
-            if (video.category === 'News') {
-                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center space-x-1.5 shadow-sm bg-sky-500/20 text-sky-400 border border-sky-500/30';
-                badge.innerHTML = `<i class="fa-solid fa-newspaper"></i><span>News</span>`;
-            } else {
-                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center space-x-1.5 shadow-sm bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30';
-                badge.innerHTML = `<i class="fa-solid fa-film"></i><span>Entertainment</span>`;
+            // Inject Player (HTML5 Blob vs YouTube)
+            playerContainer.innerHTML = '<div class="w-full h-full flex items-center justify-center text-zinc-400 text-xs">Loading video media...</div>';
+
+            if (video.type === 'file' && video.blobId) {
+                try {
+                    const blob = await getVideoBlob(video.blobId);
+                    if (blob) {
+                        const blobUrl = URL.createObjectURL(blob);
+                        playerContainer.innerHTML = `
+                            <video src="${blobUrl}" controls autoplay class="w-full h-full object-contain"></video>
+                        `;
+                    } else {
+                        playerContainer.innerHTML = `<div class="p-8 text-center text-rose-400 text-sm">Video file not found in browser storage.</div>`;
+                    }
+                } catch (err) {
+                    console.error('Error fetching video blob:', err);
+                    playerContainer.innerHTML = `<div class="p-8 text-center text-rose-400 text-sm">Error opening video file.</div>`;
+                }
+            } else if (video.type === 'youtube' && video.youtubeId) {
+                playerContainer.innerHTML = `
+                    <iframe class="w-full h-full" 
+                        src="https://www.youtube.com/embed/${video.youtubeId}?autoplay=1" 
+                        title="YouTube video player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+                `;
+            } else if (video.videoUrl) {
+                playerContainer.innerHTML = `
+                    <video src="${video.videoUrl}" controls autoplay class="w-full h-full object-contain"></video>
+                `;
             }
 
-            // Owner Delete Button visibility check
-            const deleteBtn = document.getElementById('delete-watch-btn');
-            if (state.currentUser && video.userId === state.currentUser.id) {
-                deleteBtn.classList.remove('hidden');
-            } else {
-                deleteBtn.classList.add('hidden');
-            }
+            renderComments(video);
+            renderUpNext(video);
 
-            updateWatchViewInteractionStates();
-            renderComments(videoId);
-            renderRelatedVideos(video);
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
-        function closeWatchView() {
-            const player = document.getElementById('main-video-player');
-            player.pause();
-            
-            document.getElementById('watch-view').classList.add('hidden');
-            document.getElementById('channel-view').classList.add('hidden');
-            document.getElementById('feed-view').classList.remove('hidden');
-            
+        function closeWatchModal() {
+            const modal = document.getElementById('watchModal');
+            const playerContainer = document.getElementById('videoPlayerContainer');
+            playerContainer.innerHTML = ''; // Stop video playback
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentWatchingVideoId = null;
             renderVideoGrid();
         }
 
-        function updateWatchViewInteractionStates() {
-            const isLiked = state.likedVideoIds.has(state.currentVideoId);
-            const isSaved = state.savedVideoIds.has(state.currentVideoId);
-
-            const likeBtn = document.getElementById('like-btn');
-            const bookmarkBtn = document.getElementById('bookmark-watch-btn');
-            const bookmarkText = document.getElementById('bookmark-text');
-
-            if (isLiked) {
-                likeBtn.className = 'flex items-center space-x-1.5 px-3.5 py-1.5 rounded-l-full bg-rose-600 text-white transition font-medium text-xs';
-            } else {
-                likeBtn.className = 'flex items-center space-x-1.5 px-3.5 py-1.5 rounded-l-full hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition font-medium text-xs';
-            }
-
-            if (isSaved) {
-                bookmarkBtn.className = 'flex items-center space-x-1.5 bg-rose-600 text-white px-3.5 py-1.5 rounded-full text-xs font-medium transition shadow';
-                bookmarkText.textContent = 'Saved';
-            } else {
-                bookmarkBtn.className = 'flex items-center space-x-1.5 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 px-3.5 py-1.5 rounded-full text-xs font-medium border border-zinc-300 dark:border-zinc-700/60 transition';
-                bookmarkText.textContent = 'Save';
-            }
-        }
-
-        function renderRelatedVideos(currentVideo) {
-            const container = document.getElementById('related-videos-list');
-            let related = state.videos.filter(v => v.id !== currentVideo.id && v.category === currentVideo.category);
-            if (related.length < 4) {
-                const others = state.videos.filter(v => v.id !== currentVideo.id && v.category !== currentVideo.category);
-                related = [...related, ...others];
-            }
-
-            container.innerHTML = related.slice(0, 6).map(video => `
-                <div class="related-card flex gap-3 p-2 rounded-xl hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 cursor-pointer transition" data-id="${video.id}">
-                    <div class="relative w-28 sm:w-32 aspect-video bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src="${video.thumbnail}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex-1 min-w-0 space-y-1">
-                        <h4 class="font-bold text-xs text-zinc-900 dark:text-zinc-100 leading-snug line-clamp-2">
-                            ${video.title}
-                        </h4>
-                        <div class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">${video.uploader}</div>
-                        <div class="text-[10px] text-zinc-400">${formatViews(video.views)}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            document.querySelectorAll('.related-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    openWatchView(card.getAttribute('data-id'));
-                });
+        function toggleLike() {
+            requireAuth(() => {
+                const video = videos.find(v => v.id === currentWatchingVideoId);
+                if (video) {
+                    video.likes = (video.likes || 0) + 1;
+                    document.getElementById('playerLikeCount').innerText = formatNumber(video.likes);
+                    saveVideosState();
+                    showToast('Liked video!');
+                }
             });
         }
 
-        function renderComments(videoId) {
-            const list = document.getElementById('comments-list');
-            const countBadge = document.getElementById('comment-count-badge');
-            
-            const commentsArray = state.comments[videoId] || [];
-            state.comments[videoId] = commentsArray;
-            countBadge.textContent = commentsArray.length;
+        function toggleDislike() {
+            requireAuth(() => {
+                showToast('Dislike recorded');
+            });
+        }
 
-            if (commentsArray.length === 0) {
-                list.innerHTML = `<p class="text-xs text-zinc-500 py-2">No comments yet. Be the first to share your thoughts!</p>`;
+        function shareVideo() {
+            const video = videos.find(v => v.id === currentWatchingVideoId);
+            if (video) {
+                const shareText = `Check out "${video.title}" on StreamPulse!`;
+                copyToClipboard(shareText);
+                showToast('Share link copied to clipboard!');
+            }
+        }
+
+        function renderComments(video) {
+            const list = document.getElementById('commentsList');
+            const badge = document.getElementById('commentCountBadge');
+            const comments = video.comments || [];
+
+            badge.innerText = comments.length;
+
+            if (comments.length === 0) {
+                list.innerHTML = `<p class="text-xs text-zinc-500 py-2">No comments yet. Be the first to comment!</p>`;
                 return;
             }
 
-            list.innerHTML = commentsArray.map(c => `
-                <div class="flex space-x-3 text-xs sm:text-sm">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 text-white font-bold flex items-center justify-center text-xs flex-shrink-0 uppercase">
-                        ${c.author.charAt(0)}
-                    </div>
-                    <div class="flex-1 space-y-1">
-                        <div class="flex items-center space-x-2">
-                            <span class="font-bold text-zinc-900 dark:text-zinc-100">${c.author}</span>
-                            <span class="text-[11px] text-zinc-400">${c.time}</span>
+            list.innerHTML = comments.map(c => `
+                <div class="flex items-start gap-3 bg-yt-bg/50 p-2.5 rounded-xl border border-yt-border/40">
+                    <img src="${c.avatar}" class="w-7 h-7 rounded-full object-cover border border-yt-border shrink-0" alt="User">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-xs text-zinc-200">@${escapeHTML(c.username)}</span>
+                            <span class="text-[10px] text-zinc-500">${c.date || 'Just now'}</span>
                         </div>
-                        <p class="text-zinc-700 dark:text-zinc-300 leading-relaxed">${c.text}</p>
+                        <p class="text-xs text-zinc-300 mt-0.5">${escapeHTML(c.text)}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- MODAL CONTROLS & AUTH FORM BINDINGS ---
-        function openAuthModal(tab = 'login') {
-            const modal = document.getElementById('auth-modal');
-            modal.classList.remove('hidden');
-            switchAuthTab(tab);
+        function submitComment() {
+            requireAuth(() => {
+                const input = document.getElementById('commentInput');
+                const text = input.value.trim();
+                if (!text) return;
+
+                const video = videos.find(v => v.id === currentWatchingVideoId);
+                if (video) {
+                    if (!video.comments) video.comments = [];
+                    video.comments.unshift({
+                        id: 'c_' + Date.now(),
+                        username: currentUser.username,
+                        avatar: currentUser.avatar,
+                        text: text,
+                        date: 'Just now'
+                    });
+
+                    saveVideosState();
+                    renderComments(video);
+                    input.value = '';
+                    showToast('Comment added');
+                }
+            });
         }
 
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
+        function renderUpNext(currentVideo) {
+            const container = document.getElementById('upNextContainer');
+            const related = videos.filter(v => v.id !== currentVideo.id && v.genre === currentVideo.genre).slice(0, 5);
+
+            if (related.length === 0) {
+                container.innerHTML = `<p class="text-xs text-zinc-500">No other related ${currentVideo.genre} videos.</p>`;
+                return;
+            }
+
+            container.innerHTML = related.map(v => `
+                <div onclick="openWatchModal('${v.id}')" class="flex gap-3 cursor-pointer group p-1 rounded-xl hover:bg-yt-card transition-colors">
+                    <div class="relative w-32 aspect-video rounded-lg overflow-hidden bg-zinc-800 shrink-0">
+                        <img src="${v.thumbnailUrl || 'https://placehold.co/300x200'}" class="w-full h-full object-cover" alt="Thumbnail">
+                        <span class="absolute bottom-1 right-1 bg-black/80 text-white text-[9px] font-bold px-1 rounded">
+                            ${v.duration}
+                        </span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-xs font-semibold text-white line-clamp-2 leading-tight group-hover:text-yt-red transition-colors">
+                            ${escapeHTML(v.title)}
+                        </h4>
+                        <p class="text-[11px] text-zinc-400 mt-1">${escapeHTML(v.creatorName)}</p>
+                        <p class="text-[10px] text-zinc-500">${formatNumber(v.views)} views</p>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function switchAuthTab(tab) {
-            state.authTab = tab;
-            const loginBtn = document.getElementById('tab-login-btn');
-            const signupBtn = document.getElementById('tab-signup-btn');
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
+        // ==========================================
+        // VIDEO UPLOAD & THUMBNAIL CAPTURE
+        // ==========================================
+        let currentUploadTab = 'file';
 
-            if (tab === 'login') {
-                loginBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold text-white bg-rose-600 transition shadow';
-                signupBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition';
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
+        function switchUploadTab(tab) {
+            currentUploadTab = tab;
+            const tabFile = document.getElementById('tabFile');
+            const tabUrl = document.getElementById('tabUrl');
+            const fileSection = document.getElementById('uploadFileSection');
+            const urlSection = document.getElementById('uploadUrlSection');
+
+            if (tab === 'file') {
+                tabFile.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-yt-card text-white transition-all';
+                tabUrl.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition-all';
+                fileSection.classList.remove('hidden');
+                urlSection.classList.add('hidden');
             } else {
-                signupBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold text-white bg-rose-600 transition shadow';
-                loginBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition';
-                signupForm.classList.remove('hidden');
-                loginForm.classList.add('hidden');
+                tabUrl.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-yt-card text-white transition-all';
+                tabFile.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition-all';
+                urlSection.classList.remove('hidden');
+                fileSection.classList.add('hidden');
             }
         }
 
-        function toggleUserDropdown() {
-            document.getElementById('user-dropdown').classList.toggle('hidden');
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            selectedUploadFile = file;
+            document.getElementById('fileNameDisplay').innerText = file.name;
+            document.getElementById('fileSizeDisplay').innerText = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+            document.getElementById('fileSelectedInfo').classList.remove('hidden');
+
+            // Auto-fill title if empty
+            const titleInput = document.getElementById('uploadTitle');
+            if (!titleInput.value) {
+                titleInput.value = file.name.replace(/\.[^/.]+$/, "");
+            }
         }
 
-        function closeUserDropdown() {
-            document.getElementById('user-dropdown').classList.add('hidden');
-        }
-
-        function openDeleteModal(videoId) {
-            state.pendingDeleteId = videoId;
-            document.getElementById('delete-modal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            state.pendingDeleteId = null;
-            document.getElementById('delete-modal').classList.add('hidden');
-        }
-
-        function extractVideoThumbnail(videoFile) {
+        // Generate thumbnail from video frame using Canvas
+        function generateThumbnailFromVideo(file) {
             return new Promise((resolve) => {
                 const video = document.createElement('video');
                 video.preload = 'metadata';
-                video.src = URL.createObjectURL(videoFile);
-                video.currentTime = 1;
+                video.muted = true;
+                video.playsInline = true;
+                const url = URL.createObjectURL(file);
+                video.src = url;
+
+                video.onloadedmetadata = () => {
+                    // Seek to 1 second in or mid-point
+                    video.currentTime = Math.min(1.0, video.duration / 2);
+                };
+
                 video.onseeked = () => {
                     const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth || 640;
-                    canvas.height = video.videoHeight || 360;
+                    canvas.width = 640;
+                    canvas.height = 360;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const dataUrl = canvas.toDataURL('image/jpeg');
-                    URL.revokeObjectURL(video.src);
-                    resolve(dataUrl);
+                    
+                    const durationFormatted = formatDuration(video.duration);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    URL.revokeObjectURL(url);
+                    resolve({ thumbnailUrl: dataUrl, duration: durationFormatted });
                 };
+
                 video.onerror = () => {
-                    resolve('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80');
+                    URL.revokeObjectURL(url);
+                    resolve({ 
+                        thumbnailUrl: 'https://placehold.co/600x400/1f1f1f/ffffff?text=Video+Stream',
+                        duration: '01:30' 
+                    });
                 };
             });
         }
 
-        function bindEvents() {
-            // Theme Toggle
-            document.getElementById('theme-toggle-btn').addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                state.currentTheme = isDark ? 'dark' : 'light';
-                localStorage.setItem('sp_theme', state.currentTheme);
-                showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', 'fa-sun');
-            });
+        async function handleVideoUpload(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('uploadTitle').value.trim();
+            const genre = document.querySelector('input[name="uploadGenre"]:checked').value;
+            const description = document.getElementById('uploadDescription').value.trim();
+            let customThumb = document.getElementById('uploadThumbnailUrl').value.trim();
 
-            // Auth Modal Trigger & Tab buttons
-            document.getElementById('nav-login-btn').addEventListener('click', () => openAuthModal('login'));
-            document.getElementById('close-auth-modal-btn').addEventListener('click', closeAuthModal);
-            document.getElementById('tab-login-btn').addEventListener('click', () => switchAuthTab('login'));
-            document.getElementById('tab-signup-btn').addEventListener('click', () => switchAuthTab('signup'));
-
-            // User Profile Menu Dropdown
-            document.getElementById('user-menu-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleUserDropdown();
-            });
-            document.addEventListener('click', closeUserDropdown);
-
-            document.getElementById('dropdown-logout-btn').addEventListener('click', logoutUser);
-            document.getElementById('dropdown-channel-btn').addEventListener('click', openChannelView);
-            document.getElementById('dropdown-upload-btn').addEventListener('click', () => {
-                closeUserDropdown();
-                requireAuth(() => document.getElementById('upload-modal').classList.remove('hidden'));
-            });
-            document.getElementById('dropdown-saved-btn').addEventListener('click', () => {
-                closeUserDropdown();
-                state.subFilter = 'Saved';
-                state.activeCategory = 'All';
-                updateCategoryChipUI();
-                closeWatchView();
-            });
-
-            // Login Form Submit
-            document.getElementById('login-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const id = document.getElementById('login-identifier').value.trim();
-                const pass = document.getElementById('login-password').value.trim();
-                if (loginUser(id, pass)) {
-                    closeAuthModal();
-                }
-            });
-
-            // Signup Form Submit
-            document.getElementById('signup-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const username = document.getElementById('signup-username').value.trim();
-                const email = document.getElementById('signup-email').value.trim();
-                const pass = document.getElementById('signup-password').value.trim();
-                if (registerUser(username, email, pass)) {
-                    closeAuthModal();
-                }
-            });
-
-            // Delete Modal Handlers
-            document.getElementById('cancel-delete-btn').addEventListener('click', closeDeleteModal);
-            document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-                if (state.pendingDeleteId) {
-                    await deleteVideoFromStorage(state.pendingDeleteId);
-                    state.videos = state.videos.filter(v => v.id !== state.pendingDeleteId);
-                    state.savedVideoIds.delete(state.pendingDeleteId);
-                    
-                    if (state.currentVideoId === state.pendingDeleteId) {
-                        closeWatchView();
-                    }
-                    
-                    renderCategoryCounts();
-                    renderVideoGrid();
-                    updateSavedBadge();
-                    showToast('Video permanently deleted', 'fa-trash');
-                }
-                closeDeleteModal();
-            });
-
-            // Back to Feed Button
-            document.getElementById('back-to-feed-btn').addEventListener('click', closeWatchView);
-            document.getElementById('logo-home-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                state.activeCategory = 'All';
-                state.subFilter = null;
-                state.searchQuery = '';
-                document.getElementById('search-input').value = '';
-                updateCategoryChipUI();
-                closeWatchView();
-            });
-
-            // Sidebar Nav
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const nav = btn.getAttribute('data-nav');
-                    if (nav === 'home') {
-                        state.activeCategory = 'All';
-                        state.subFilter = null;
-                        closeWatchView();
-                    } else if (nav === 'channel') {
-                        openChannelView();
-                    } else if (nav === 'saved') {
-                        state.subFilter = 'Saved';
-                        state.activeCategory = 'All';
-                        closeWatchView();
-                    } else if (nav === 'trending') {
-                        state.subFilter = 'Popular';
-                        closeWatchView();
-                    }
-                    updateCategoryChipUI();
-                });
-            });
-
-            // Genre Sidebar Buttons
-            document.querySelectorAll('.genre-sidebar-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const genre = btn.getAttribute('data-genre');
-                    state.activeCategory = genre;
-                    state.subFilter = null;
-                    updateCategoryChipUI();
-                    closeWatchView();
-                });
-            });
-
-            // Category Chips
-            document.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const cat = chip.getAttribute('data-category');
-                    if (cat === 'MyUploads' && !state.currentUser) {
-                        openAuthModal();
-                        return;
-                    }
-                    if (cat) {
-                        state.activeCategory = cat;
-                        state.subFilter = null;
-                    }
-                    updateCategoryChipUI();
-                    renderVideoGrid();
-                });
-            });
-
-            // Search Input
-            const searchInput = document.getElementById('search-input');
-            const clearSearchBtn = document.getElementById('clear-search-btn');
-
-            searchInput.addEventListener('input', (e) => {
-                state.searchQuery = e.target.value;
-                if (state.searchQuery.length > 0) {
-                    clearSearchBtn.classList.remove('hidden');
-                    document.getElementById('search-stats').classList.remove('hidden');
-                    document.getElementById('search-term-display').textContent = state.searchQuery;
-                } else {
-                    clearSearchBtn.classList.add('hidden');
-                    document.getElementById('search-stats').classList.add('hidden');
-                }
-                renderVideoGrid();
-            });
-
-            clearSearchBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                state.searchQuery = '';
-                clearSearchBtn.classList.add('hidden');
-                document.getElementById('search-stats').classList.add('hidden');
-                renderVideoGrid();
-            });
-
-            document.getElementById('clear-search-filter').addEventListener('click', () => {
-                searchInput.value = '';
-                state.searchQuery = '';
-                clearSearchBtn.classList.add('hidden');
-                document.getElementById('search-stats').classList.add('hidden');
-                renderVideoGrid();
-            });
-
-            // Upload Modal Triggers
-            const uploadModal = document.getElementById('upload-modal');
-            const openUpload = () => requireAuth(() => uploadModal.classList.remove('hidden'));
-
-            document.getElementById('open-upload-modal-btn').addEventListener('click', openUpload);
-            document.getElementById('empty-upload-btn').addEventListener('click', openUpload);
-            document.getElementById('channel-upload-btn').addEventListener('click', openUpload);
-            document.getElementById('close-upload-modal-btn').addEventListener('click', () => uploadModal.classList.add('hidden'));
-            document.getElementById('cancel-upload-btn').addEventListener('click', () => uploadModal.classList.add('hidden'));
-
-            // Drag & Drop Upload Handlers
-            const dropZone = document.getElementById('drop-zone');
-            const fileInput = document.getElementById('video-file-input');
-            const filePreviewPlayer = document.getElementById('file-preview-player');
-            let selectedFile = null;
-
-            dropZone.addEventListener('click', (e) => {
-                if (e.target.id !== 'remove-file-btn') fileInput.click();
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files && e.target.files[0]) handleFileSelect(e.target.files[0]);
-            });
-
-            function handleFileSelect(file) {
-                if (!file.type.startsWith('video/')) {
-                    showToast('Please upload a valid video file!', 'fa-triangle-exclamation');
-                    return;
-                }
-                selectedFile = file;
-                filePreviewPlayer.src = URL.createObjectURL(file);
-                
-                document.getElementById('upload-prompt').classList.add('hidden');
-                document.getElementById('file-preview-container').classList.remove('hidden');
-                document.getElementById('file-name-display').textContent = file.name;
+            if (!title) {
+                showToast('Please provide a video title!');
+                return;
             }
 
-            document.getElementById('remove-file-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                selectedFile = null;
-                filePreviewPlayer.src = '';
-                document.getElementById('upload-prompt').classList.remove('hidden');
-                document.getElementById('file-preview-container').classList.add('hidden');
-            });
+            const btnSubmit = document.getElementById('btnSubmitUpload');
+            const progressContainer = document.getElementById('uploadProgressContainer');
+            const progressBar = document.getElementById('uploadProgressBar');
+            const progressText = document.getElementById('uploadProgressText');
 
-            // Upload Form Submission
-            document.getElementById('upload-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50');
+            progressContainer.classList.remove('hidden');
 
-                if (!selectedFile) {
-                    showToast('Please select a video file!', 'fa-circle-exclamation');
+            let newVideo = {
+                id: 'vid_' + Date.now(),
+                title: title,
+                description: description,
+                creatorId: currentUser.id,
+                creatorName: currentUser.username,
+                creatorAvatar: currentUser.avatar,
+                genre: genre, // Mandatory genre classification
+                views: 0,
+                likes: 0,
+                dislikes: 0,
+                comments: [],
+                createdAt: new Date().toISOString()
+            };
+
+            if (currentUploadTab === 'file') {
+                if (!selectedUploadFile) {
+                    showToast('Please select a local video file!');
+                    btnSubmit.disabled = false;
+                    btnSubmit.classList.remove('opacity-50');
                     return;
                 }
 
-                const title = document.getElementById('upload-title').value.trim();
-                const selectedGenre = document.querySelector('input[name="upload-genre"]:checked').value;
-                const customThumb = document.getElementById('upload-thumbnail').value.trim();
-                const desc = document.getElementById('upload-desc').value.trim() || 'No description provided.';
+                // Simulate progress updates for user feedback
+                progressBar.style.width = '30%';
+                progressText.innerText = '30%';
 
-                showToast('Publishing video...', 'fa-spinner');
+                // Auto-generate Thumbnail and Duration
+                const videoMeta = await generateThumbnailFromVideo(selectedUploadFile);
+                progressBar.style.width = '60%';
+                progressText.innerText = '60%';
 
-                let finalThumbnail = customThumb || await extractVideoThumbnail(selectedFile);
+                // Save binary file into IndexedDB
+                try {
+                    await saveVideoBlob(newVideo.id, selectedUploadFile);
+                    newVideo.type = 'file';
+                    newVideo.blobId = newVideo.id;
+                    newVideo.thumbnailUrl = customThumb || videoMeta.thumbnailUrl;
+                    newVideo.duration = videoMeta.duration;
 
-                const newVideo = {
-                    id: 'usr-vid-' + Date.now(),
-                    userId: state.currentUser.id,
-                    title: title,
-                    category: selectedGenre,
-                    uploader: state.currentUser.username,
-                    views: 1,
-                    duration: '01:30',
-                    timestamp: 'Just now',
-                    url: URL.createObjectURL(selectedFile),
-                    thumbnail: finalThumbnail,
-                    description: desc,
-                    likes: 0
-                };
-
-                state.videos.unshift(newVideo);
-                await saveVideoToStorage(newVideo);
-
-                uploadModal.classList.add('hidden');
-                document.getElementById('upload-form').reset();
-                selectedFile = null;
-                document.getElementById('upload-prompt').classList.remove('hidden');
-                document.getElementById('file-preview-container').classList.add('hidden');
-
-                renderCategoryCounts();
-                state.activeCategory = selectedGenre;
-                updateCategoryChipUI();
-                renderVideoGrid();
-
-                showToast(`Published under ${selectedGenre}!`, 'fa-circle-check');
-            });
-
-            // Comment Submission
-            document.getElementById('add-comment-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                requireAuth(() => {
-                    const input = document.getElementById('comment-input');
-                    const text = input.value.trim();
-                    if (!text || !state.currentVideoId) return;
-
-                    const newComment = {
-                        author: state.currentUser.username,
-                        time: 'Just now',
-                        text: text
-                    };
-
-                    if (!state.comments[state.currentVideoId]) state.comments[state.currentVideoId] = [];
-                    state.comments[state.currentVideoId].unshift(newComment);
-                    localStorage.setItem('sp_comments', JSON.stringify(state.comments));
-
-                    input.value = '';
-                    renderComments(state.currentVideoId);
-                    showToast('Comment posted!', 'fa-comment');
-                });
-            });
-
-            // Like / Save Triggers inside Player
-            document.getElementById('like-btn').addEventListener('click', () => {
-                requireAuth(() => {
-                    if (!state.currentVideoId) return;
-                    const video = state.videos.find(v => v.id === state.currentVideoId);
-                    if (!video) return;
-
-                    if (state.likedVideoIds.has(state.currentVideoId)) {
-                        state.likedVideoIds.delete(state.currentVideoId);
-                        video.likes = Math.max(0, video.likes - 1);
-                    } else {
-                        state.likedVideoIds.add(state.currentVideoId);
-                        video.likes += 1;
-                    }
-
-                    localStorage.setItem('sp_liked_ids', JSON.stringify([...state.likedVideoIds]));
-                    document.getElementById('like-count').textContent = video.likes.toLocaleString();
-                    updateWatchViewInteractionStates();
-                });
-            });
-
-            document.getElementById('bookmark-watch-btn').addEventListener('click', () => {
-                requireAuth(() => {
-                    if (!state.currentVideoId) return;
-                    toggleSaveVideo(state.currentVideoId);
-                    updateWatchViewInteractionStates();
-                });
-            });
-
-            document.getElementById('delete-watch-btn').addEventListener('click', () => {
-                if (state.currentVideoId) openDeleteModal(state.currentVideoId);
-            });
-        }
-
-        function toggleSaveVideo(videoId) {
-            if (state.savedVideoIds.has(videoId)) {
-                state.savedVideoIds.delete(videoId);
-                showToast('Removed from Saved Library', 'fa-bookmark');
-            } else {
-                state.savedVideoIds.add(videoId);
-                showToast('Saved to Library!', 'fa-bookmark');
-            }
-
-            localStorage.setItem('sp_saved_ids', JSON.stringify([...state.savedVideoIds]));
-            updateSavedBadge();
-            renderVideoGrid();
-        }
-
-        function updateSavedBadge() {
-            const badge = document.getElementById('saved-badge');
-            const count = state.savedVideoIds.size;
-            if (count > 0) {
-                badge.classList.remove('hidden');
-                badge.textContent = count;
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function updateCategoryChipUI() {
-            document.querySelectorAll('.chip-btn').forEach(btn => {
-                const cat = btn.getAttribute('data-category');
-                if (cat === state.activeCategory && !state.subFilter) {
-                    btn.className = 'chip-btn active px-4 py-2 rounded-full text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-600/30 transition-all';
-                } else {
-                    btn.className = 'chip-btn px-4 py-2 rounded-full text-xs font-medium bg-zinc-200 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-all';
+                    progressBar.style.width = '100%';
+                    progressText.innerText = '100%';
+                } catch (err) {
+                    console.error('IndexedDB Save Error:', err);
+                    showToast('Failed to save video to storage.');
+                    btnSubmit.disabled = false;
+                    return;
                 }
+
+            } else {
+                // Tab: URL / YouTube
+                const videoUrl = document.getElementById('videoUrlInput').value.trim();
+                if (!videoUrl) {
+                    showToast('Please enter a YouTube or Video URL!');
+                    btnSubmit.disabled = false;
+                    return;
+                }
+
+                const ytId = extractYouTubeId(videoUrl);
+                if (ytId) {
+                    newVideo.type = 'youtube';
+                    newVideo.youtubeId = ytId;
+                    newVideo.videoUrl = videoUrl;
+                    newVideo.thumbnailUrl = customThumb || `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+                    newVideo.duration = '05:00';
+                } else {
+                    newVideo.type = 'url';
+                    newVideo.videoUrl = videoUrl;
+                    newVideo.thumbnailUrl = customThumb || 'https://placehold.co/600x400/1f1f1f/ffffff?text=StreamPulse';
+                    newVideo.duration = '03:15';
+                }
+            }
+
+            // Save metadata
+            videos.unshift(newVideo);
+            saveVideosState();
+
+            // Reset UI
+            setTimeout(() => {
+                closeUploadModal();
+                showToast(`"${title}" published successfully!`);
+                renderVideoGrid();
+            }, 400);
+        }
+
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function openUploadModal() {
+            document.getElementById('uploadForm').reset();
+            selectedUploadFile = null;
+            document.getElementById('fileSelectedInfo').classList.add('hidden');
+            document.getElementById('uploadProgressContainer').classList.add('hidden');
+            document.getElementById('btnSubmitUpload').disabled = false;
+            document.getElementById('btnSubmitUpload').classList.remove('opacity-50');
+            switchUploadTab('file');
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+        }
+
+        // ==========================================
+        // USER AUTHENTICATION & MY CHANNEL
+        // ==========================================
+        function renderAuthHeader() {
+            const container = document.getElementById('authContainer');
+            if (currentUser) {
+                container.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <button onclick="navigateTo('my-channel')" class="flex items-center gap-2 hover:bg-yt-hover p-1 px-2 rounded-full transition-colors">
+                            <img src="${currentUser.avatar}" class="w-8 h-8 rounded-full object-cover border border-yt-red" alt="User">
+                            <span class="text-xs font-semibold text-white hidden md:inline">${escapeHTML(currentUser.username)}</span>
+                        </button>
+                        <button onclick="handleLogout()" class="p-2 text-zinc-400 hover:text-white hover:bg-yt-hover rounded-full transition-colors" title="Log Out">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 bg-yt-card hover:bg-yt-hover text-zinc-100 border border-yt-border text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-full transition-colors">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Sign In</span>
+                    </button>
+                `;
+            }
+        }
+
+        function requireAuth(callback) {
+            if (!currentUser) {
+                openAuthModal('login');
+                showToast('Please sign in to perform this action');
+                return;
+            }
+            callback();
+        }
+
+        function openAuthModal(mode = 'login') {
+            switchAuthTab(mode);
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const tabLogin = document.getElementById('authTabLogin');
+            const tabSignup = document.getElementById('authTabSignup');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                tabLogin.className = 'flex-1 pb-3 text-sm font-bold text-yt-red border-b-2 border-yt-red transition-all';
+                tabSignup.className = 'flex-1 pb-3 text-sm font-bold text-zinc-400 border-b-2 border-transparent hover:text-white transition-all';
+            } else {
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                tabSignup.className = 'flex-1 pb-3 text-sm font-bold text-yt-red border-b-2 border-yt-red transition-all';
+                tabLogin.className = 'flex-1 pb-3 text-sm font-bold text-zinc-400 border-b-2 border-transparent hover:text-white transition-all';
+            }
+        }
+
+        function selectAvatar(imgEl) {
+            document.querySelectorAll('.avatar-opt').forEach(el => el.classList.replace('border-yt-red', 'border-transparent'));
+            imgEl.classList.replace('border-transparent', 'border-yt-red');
+            selectedAvatarUrl = imgEl.src;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const name = email.split('@')[0] || 'Creator';
+            
+            currentUser = {
+                id: 'user_' + Date.now(),
+                username: name,
+                email: email,
+                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`
+            };
+
+            localStorage.setItem('streampulse_user', JSON.stringify(currentUser));
+            renderAuthHeader();
+            closeAuthModal();
+            showToast(`Welcome back, ${currentUser.username}!`);
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+
+            currentUser = {
+                id: 'user_' + Date.now(),
+                username: username,
+                email: email,
+                avatar: selectedAvatarUrl
+            };
+
+            localStorage.setItem('streampulse_user', JSON.stringify(currentUser));
+            renderAuthHeader();
+            closeAuthModal();
+            showToast(`Account created! Welcome @${username}`);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('streampulse_user');
+            renderAuthHeader();
+            navigateTo('home');
+            showToast('Logged out successfully');
+        }
+
+        function navigateTo(view) {
+            const grid = document.getElementById('videoGridView');
+            const empty = document.getElementById('emptyState');
+            const myChannelView = document.getElementById('myChannelView');
+            const chips = document.getElementById('categoryChips');
+            
+            const navHome = document.getElementById('navHome');
+            const navChannel = document.getElementById('navChannel');
+
+            if (view === 'my-channel') {
+                if (!currentUser) return;
+                grid.classList.add('hidden');
+                empty.classList.add('hidden');
+                chips.classList.add('hidden');
+                myChannelView.classList.remove('hidden');
+
+                navChannel.className = 'flex items-center gap-4 px-4 py-3 rounded-xl bg-yt-hover font-medium text-sm text-white transition-colors';
+                navHome.className = 'flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-yt-hover text-zinc-400 hover:text-white font-medium text-sm transition-colors';
+
+                renderMyChannel();
+            } else {
+                myChannelView.classList.add('hidden');
+                chips.classList.remove('hidden');
+                navHome.className = 'flex items-center gap-4 px-4 py-3 rounded-xl bg-yt-hover font-medium text-sm text-white transition-colors';
+                navChannel.className = 'flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-yt-hover text-zinc-400 hover:text-white font-medium text-sm transition-colors';
+                renderVideoGrid();
+            }
+        }
+
+        function renderMyChannel() {
+            document.getElementById('channelName').innerText = currentUser.username;
+            document.getElementById('channelEmail').innerText = currentUser.email;
+            document.getElementById('channelAvatar').src = currentUser.avatar;
+
+            const myVideos = videos.filter(v => v.creatorId === currentUser.id);
+            const totalViews = myVideos.reduce((sum, v) => sum + (v.views || 0), 0);
+            const totalLikes = myVideos.reduce((sum, v) => sum + (v.likes || 0), 0);
+
+            document.getElementById('statUploads').innerText = myVideos.length;
+            document.getElementById('statViews').innerText = formatNumber(totalViews);
+            document.getElementById('statLikes').innerText = formatNumber(totalLikes);
+
+            const list = document.getElementById('channelVideoList');
+            if (myVideos.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-zinc-400 text-sm">
+                        You haven't uploaded any videos yet. Click "New Upload" to get started!
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = myVideos.map(v => `
+                <div class="bg-yt-card border border-yt-border/60 rounded-2xl overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative aspect-video bg-zinc-800">
+                            <img src="${v.thumbnailUrl || 'https://placehold.co/600x400'}" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                                ${v.duration}
+                            </span>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-bold text-white text-xs line-clamp-1">${escapeHTML(v.title)}</h4>
+                            <div class="flex items-center gap-2 text-[10px] text-zinc-400 mt-1">
+                                <span>${v.genre}</span>
+                                <span>•</span>
+                                <span>${formatNumber(v.views)} views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 pt-0 flex justify-end">
+                        <button onclick="deleteVideo('${v.id}')" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteVideo(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (!video) return;
+
+            // Delete from IndexedDB if file
+            if (video.type === 'file' && video.blobId) {
+                await deleteVideoBlob(video.blobId);
+            }
+
+            // Delete metadata
+            videos = videos.filter(v => v.id !== videoId);
+            saveVideosState();
+            renderMyChannel();
+            showToast('Video deleted');
+        }
+
+        // ==========================================
+        // UTILITY FUNCTIONS
+        // ==========================================
+        function openVercelGuideModal() {
+            document.getElementById('vercelModal').classList.remove('hidden');
+        }
+
+        function closeVercelGuideModal() {
+            document.getElementById('vercelModal').classList.add('hidden');
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds || isNaN(seconds)) return '00:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function formatNumber(num) {
+            if (!num) return '0';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function formatRelativeTime(isoString) {
+            if (!isoString) return 'recently';
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffSecs = Math.floor((now - date) / 1000);
+
+            if (diffSecs < 60) return 'just now';
+            if (diffSecs < 3600) return `${Math.floor(diffSecs / 60)}m ago`;
+            if (diffSecs < 86400) return `${Math.floor(diffSecs / 3600)}h ago`;
+            return `${Math.floor(diffSecs / 86400)}d ago`;
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (e) {
+                console.error(e);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'bg-yt-card border border-yt-border text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-4 opacity-0 pointer-events-auto';
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-yt-red"></i> ${escapeHTML(message)}`;
+            
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
             });
-        }
 
-        function showToast(message, iconClass = 'fa-check') {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = message;
-            document.getElementById('toast-icon').className = `fa-solid ${iconClass}`;
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'), 3000);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
-
-        window.onload = function() {
-            initApp();
-        };
     </script>
 </body>
 </html>
